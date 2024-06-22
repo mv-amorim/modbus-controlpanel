@@ -1,133 +1,143 @@
 from pyModbusTCP.client import ModbusClient
+from pymodbus.payload import BinaryPayloadDecoder
+from pymodbus.payload import BinaryPayloadBuilder
 
 float_tags_addrs = {
-  'co.corrente_r': 840,
-  'co.corrente_s': 841,
-  'co.corrente_t': 842,
-  'co.corrente_n': 843,
-  'co.corrente_media': 845,
-  'co.tensao_rs': 847,
-  'co.tensao_st': 848,
-  'co.tensao_tr': 849,
-  'co.ativa_r': 852,
-  'co.ativa_s': 853,
-  'co.ativa_t': 854,
-  'co.ativa_total': 855,
-  'co.reativa_r': 856,
-  'co.reativa_s': 857,
-  'co.reativa_t': 858,
-  'co.reativa_total': 859,
-  'co.aparente_r': 860,
-  'co.aparente_s': 861,
-  'co.aparente_t': 862,
-  'co.aparente_total': 863,
-  'co.temp_r': 700,
-  'co.temp_s': 702,
-  'co.temp_t': 704,
-  'co.temp_carc': 706,
-  'co.pressao': 714,
-  'co.fit02': 716,
-  'co.fit03': 718,
-  'co.torque': 1420,
+    'co.corrente_r': 840,
+    'co.corrente_s': 841,
+    'co.corrente_t': 842,
+    'co.corrente_n': 843,
+    'co.corrente_media': 845,
+    'co.tensao_rs': 847,
+    'co.tensao_st': 848,
+    'co.tensao_tr': 849,
+    'co.ativa_r': 852,
+    'co.ativa_s': 853,
+    'co.ativa_t': 854,
+    'co.ativa_total': 855,
+    'co.reativa_r': 856,
+    'co.reativa_s': 857,
+    'co.reativa_t': 858,
+    'co.reativa_total': 859,
+    'co.aparente_r': 860,
+    'co.aparente_s': 861,
+    'co.aparente_t': 862,
+    'co.aparente_total': 863,
+    'co.temp_r': 700,
+    'co.temp_s': 702,
+    'co.temp_t': 704,
+    'co.temp_carc': 706,
+    'co.pressao': 714,
+    'co.fit02': 716,
+    'co.fit03': 718,
+    'co.torque': 1420,
 }
 
 int_tags_addrs = {
-  'co.encoder': 884,
+    'co.encoder': 884,
 }
 
 class ClienteMODBUS():
-  """
-  Classe Cliente MODBUS
-  """
-  def __init__(self, server_ip,porta,scan_time=1):
     """
-    Construtor
+    Classe Cliente MODBUS
     """
-    self._cliente = ModbusClient(host=server_ip,port = porta)
-    self._scan_time = scan_time
+    def __init__(self, server_ip, porta, scan_time=1):
+        """
+        Construtor
+        """
+        self._client = ModbusClient(host=server_ip,port = porta)
+        self._scan_time = scan_time
 
     def get_vel(self):
+        return
       
-    
     def get_torque(self):
-        
+        return
 
     def get_correntes(self):
-      res = {
-        'r': r,
-        's': s,
-        't': t,
-        'n': n,
-        'med': med
-      }
-      return res
+        res = { 'r': r, 's': s, 't': t, 'n': n, 'med': med }
+        return res
     
     def get_pot_atv(self):
-       return [r, s, t, tot]
+        return [r, s, t, tot]
     
     def get_pot_reat(self):
-       return [r, s, t, tot]
+        return [r, s, t, tot]
     
     def get_pot_apar(self):
-       return [r, s, t, tot]
+        return [r, s, t, tot]
     
     def get_freq(self):
-       
+        return
        
     def get_tensoes(self):
-       return [rs, st, tr, med]
+        return [rs, st, tr, med]
     
     def get_temps(self):
-       return [r, s, t, carc]
+        return [r, s, t, carc]
 
     def get_pressoes(self):
-       return [pit01, fit02, fit03]
+        return [pit01, fit02, fit03]
     
     #def get_fv01(self):
 
     def get_xv(self):
-       return [xv1, xv2, xv3, xv4, xv5, xv6]
+        data = self._client.read_holding_registers(712, 1, unit=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
+        bits = decoder.decode_bits()
+        return bits[:5]
 
     def set_xv(self, xv):
-
+        builder = BinaryPayloadBuilder()
+        builder.add_bits(xv)
+        regs = builder.to_registers
+        self._client.write_multiple_registers(712, regs)
+        return xv
 
     def get_softstart(self):
-
+        data = self._client.read_holding_registers(1316, 1, unit=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
+        res = decoder.decode_8bit_uint()
+        return res
 
     def set_softstart(self, soft_s):
-       
+        if soft_s in [0, 1, 2]:
+            builder = BinaryPayloadBuilder()
+            builder.add_8bit_uint(soft_s)
+            regs = builder.to_registers
+            self._client.write_multiple_registers(1316, regs)
+            return soft_s
+        else:
+            return
     
     def get_dirstart(self):
-      
+        data = self._client.read_holding_registers(1319, 1, unit=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
+        res = decoder.decode_8bit_uint()
+        return res
     
     def set_dirstart(self, dir_s):
+        if dir_s in [0, 1, 2]:
+            builder = BinaryPayloadBuilder()
+            builder.add_8bit_uint(dir_s)
+            regs = builder.to_registers
+            self._client.write_multiple_registers(1319, regs)
+            return dir_s
+        else:
+            return
        
-    def get_invstart(self):
+    def get_start(self):
+        data = self._client.read_holding_registers(1324, 1, unit=1)
+        decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
+        res = decoder.decode_8bit_uint()
+        return res
        
-    def set_invstart(self, inv_s):
-
-    def lerDado(self, tipo, addr):
-        """
-        Método para leitura de um dado da Tabela MODBUS
-        """
-        if tipo == 1:
-            return self._cliente.read_holding_registers(addr,1)[0]
-
-        if tipo == 2:
-            return self._cliente.read_coils(addr,1)[0]
-
-        if tipo == 3:
-            return self._cliente.read_input_registers(addr,1)[0]
-
-        if tipo == 4:
-            return self._cliente.read_discrete_inputs(addr,1)[0]
-
-    def escreveDado(self, tipo, addr, valor):
-        """
-        Método para a escrita de dados na Tabela MODBUS
-        """
-        if tipo == 1:
-            return self._cliente.write_single_register(addr,valor)
-
-        if tipo == 2:
-            return self._cliente.write_single_coil(addr,valor)
+    def set_start(self, start):
+        if start in [1, 2, 3]:
+            builder = BinaryPayloadBuilder()
+            builder.add_8bit_uint(start)
+            regs = builder.to_registers
+            self._client.write_multiple_registers(1324, regs)
+            return start
+        else:
+            return
