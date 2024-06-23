@@ -49,10 +49,14 @@ class ClienteMODBUS():
         self._scan_time = scan_time
 
     def get_vel(self):
+
         return
       
     def get_torque(self):
-        return
+        data = self._client.read_holding_registers(1420, 2)
+        decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
+        res = decoder.decode_32bit_float()
+        return res
 
     def get_correntes(self):
         res = { 'r': r, 's': s, 't': t, 'n': n, 'med': med }
@@ -68,7 +72,10 @@ class ClienteMODBUS():
         return [r, s, t, tot]
     
     def get_freq(self):
-        return
+        data = self._client.read_holding_registers(884, 2)
+        decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
+        res = decoder.decode_32bit_float()
+        return res
        
     def get_tensoes(self):
         return [rs, st, tr, med]
@@ -82,7 +89,7 @@ class ClienteMODBUS():
     #def get_fv01(self):
 
     def get_xv(self):
-        data = self._client.read_holding_registers(712, 1, unit=1)
+        data = self._client.read_holding_registers(712, 1)
         decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
         bits = decoder.decode_bits()
         return bits[:5]
@@ -95,9 +102,9 @@ class ClienteMODBUS():
         return xv
 
     def get_softstart(self):
-        data = self._client.read_holding_registers(1316, 1, unit=1)
+        data = self._client.read_holding_registers(1316, 1)
         decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
-        res = decoder.decode_8bit_uint()
+        res = decoder.decode_16bit_uint()
         return res
 
     def set_softstart(self, soft_s):
@@ -111,9 +118,9 @@ class ClienteMODBUS():
             return
     
     def get_dirstart(self):
-        data = self._client.read_holding_registers(1319, 1, unit=1)
+        data = self._client.read_holding_registers(1319, 1)
         decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
-        res = decoder.decode_8bit_uint()
+        res = decoder.decode_16bit_uint()
         return res
     
     def set_dirstart(self, dir_s):
@@ -127,9 +134,9 @@ class ClienteMODBUS():
             return
        
     def get_start(self):
-        data = self._client.read_holding_registers(1324, 1, unit=1)
+        data = self._client.read_holding_registers(1324, 1)
         decoder = BinaryPayloadDecoder.fromRegisters(data.registers)
-        res = decoder.decode_8bit_uint()
+        res = decoder.decode_16bit_uint()
         return res
        
     def set_start(self, start):
