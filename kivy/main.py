@@ -47,8 +47,8 @@ class MainApp(App):
 if __name__ == '__main__':
     Window.size=(650,500)  # mudo o tamanho da janela aqui
     Window.fullscreen = False  # o aplicativo roda em tela inteira se for True
-    Builder.load_string(open("mainwidget.kv", encoding="utf-8").read(),rulesonly=True)
-    Builder.load_string(open("popups.kv", encoding="utf-8").read(),rulesonly=True)
+    Builder.load_string(open("kivy/mainwidget.kv", encoding="utf-8").read(),rulesonly=True)
+    Builder.load_string(open("kivy/popups.kv", encoding="utf-8").read(),rulesonly=True)
     MainApp().run()
 
 '''
