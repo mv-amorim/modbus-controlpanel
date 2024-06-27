@@ -169,14 +169,29 @@ class CustomModbusClient(ModbusClient):
         res['co.soft_start'] = self.get_softstart()
         res['co.torque'] = self.get_torque()
 
-        res = res | self.get_pressoes()
-        res = res | {f'co.xv${i}': xv for i, xv in self.get_xv()}
-        res = res | {f'co.temp_${k}': v for k, v in self.get_temps()}
-        res = res | {f'co.tensao_${k}': v for k, v in self.get_tensoes()}
-        res = res | {f'co.ativa_${k}': v for k, v in self.get_pot_atv()}
-        res = res | {f'co.reativa_${k}': v for k, v in self.get_pot_reat()}
-        res = res | {f'co.aparente_${k}': v for k, v in self.get_pot_apar()}
-        res = res | {f'co.corrente_${k}': v for k, v in self.get_correntes()}
+        tmp = self.get_pressoes()
+        res = res | {f'co.{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = self.get_xv()
+        res = res | {f'co.xv{i}': tmp[i] for i in tmp}
+
+        tmp = self.get_temps()
+        res = res | {f'co.temp_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = self.get_tensoes()
+        res = res | {f'co.tensao_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = self.get_pot_atv()
+        res = res | {f'co.ativa_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = self.get_pot_reat()
+        res = res | {f'co.reativa_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = self.get_pot_apar()
+        res = res | {f'co.aparente_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = self.get_correntes()
+        res = res | {f'co.corrente_{k}': tmp[k] for k in tmp.keys()}
 
         return res
 

@@ -8,6 +8,8 @@ import random
 from modbusclient import CustomModbusClient
 from timeseriesgraph import TimeSeriesGraph
 
+tags = ['co.temp_carc', 'co.pit01', 'co.vel']
+
 class MainWidget(BoxLayout):
     _updateThread = None
     _updateWidgets = True
@@ -21,17 +23,14 @@ class MainWidget(BoxLayout):
         self._scan_time = kwargs.get('scan_time')
 
         self._data['timestamp'] = None
-        self._data['values'] = { 'temp_carc': None, 'pressao': None, 'freq': None }
+        self._data['values'] = None
 
         self._modbusClient = CustomModbusClient(server_ip=self._server_ip, port=self._server_port)
 
         self._modbusPopup = ModbusPopup(self._server_ip, self._server_port)
         self._scanPopup = ScanPopup(scantime=self._scan_time)
-
+        
         '''
-        self._meas = {}
-        self._meas['timestamp'] = None
-        self._meas['values'] = {}
         for key, value in kwargs.get('modbus_addrs').items():
             if key == 'co.pressao':
                 plot_color = (1,0,0,1)
@@ -65,7 +64,9 @@ class MainWidget(BoxLayout):
         try:
             while self._updateWidgets:
                 self._data['timestamp'] = datetime.now()
-                self._data['values'] = self._modbusClient.fetch_data()
+                data = self._modbusClient.fetch_data()
+                print(data)
+                self._data['values'] = data
                 self.updateGUI()
                 # Banco de dados
                 sleep(self._scan_time / 1000)
@@ -73,10 +74,10 @@ class MainWidget(BoxLayout):
             print("Erro: ", e.args)
 
     def updateGUI(self):
-        for key, value in self._data['values']:
-            self.ids[key].text = str(value)
+        for t in tags:
+            self.ids[t].text = str(self._data['values'][t])
         #Atualização do gráfico
-        self._graph.ids.graph.updateGraph((self._data['timestamp'], self._data['values']['pit01']), 0)
+        self._graph.ids.graph.updateGraph((self._data['timestamp'], self._data['values']['co.pit01']), 0)
     
     def stopRefresh(self):
         self._updateWidgets = False

@@ -1,7 +1,7 @@
 from kivy.app import App
 from mainwidget import MainWidget
 from kivy.lang.builder import Builder
-from kivy.core.window import Window  # consigo definir o tamnho da janela
+from kivy.core.window import Window  # consigo definir o tamnho da janela5
 
 class MainApp(App):    
     def build(self):
