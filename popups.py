@@ -4,12 +4,11 @@ from kivy_garden.graph import LinePlot
 from kivy.uix.boxlayout import BoxLayout
 
 class ModbusPopup(Popup):
-    
     _info_lb = None
     def __init__(self, server_ip, server_port,**kwargs):
         super().__init__(**kwargs)
         self.ids.txt_ip.text = str(server_ip)
-        self.ids.txt_porta.text = str(server_port)
+        self.ids.txt_port.text = str(server_port)
 
     def setInfo(self, message):
         self._info_lb = Label(text = message)
@@ -20,7 +19,6 @@ class ModbusPopup(Popup):
             self.ids.layout.remove_widget(self._info_lb)
  
 class ScanPopup(Popup):
-    
     def __init__(self, scantime, **kwargs):
         super().__init__(**kwargs)
         self.ids.txt_st.text = str(scantime)

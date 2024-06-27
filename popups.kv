@@ -23,7 +23,7 @@
                 text: "Porta"
                 font_size: 14
             TextInput:
-                id: txt_porta   
+                id: txt_port
                 text: "502"
                 font_size: 14
                 halign: 'center'
@@ -36,7 +36,7 @@
                 text: "Conectar"
                 on_release:
                     root.clearInfo()
-                    app.root.startDataRead(txt_ip.text, int(txt_porta.text))
+                    app.root.start_connection(txt_ip.text, int(txt_port.text))
             Button:
                 size_hint_y: None
                 height: 40
