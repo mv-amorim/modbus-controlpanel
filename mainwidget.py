@@ -5,7 +5,7 @@ from threading import Thread
 from time import sleep
 from datetime import datetime
 import random 
-from modbusclient import EnhancedModbusClient
+from modbusclient import CustomModbusClient
 from timeseriesgraph import TimeSeriesGraph
 
 class MainWidget(BoxLayout):
@@ -23,7 +23,7 @@ class MainWidget(BoxLayout):
         self._data['timestamp'] = None
         self._data['values'] = { 'temp_carc': None, 'pressao': None, 'freq': None }
 
-        self._modbusClient = EnhancedModbusClient(server_ip=self._server_ip, port=self._server_port)
+        self._modbusClient = CustomModbusClient(server_ip=self._server_ip, port=self._server_port)
 
         self._modbusPopup = ModbusPopup(self._server_ip, self._server_port)
         self._scanPopup = ScanPopup(scantime=self._scan_time)

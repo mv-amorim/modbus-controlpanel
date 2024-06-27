@@ -2,7 +2,7 @@ from pyModbusTCP.client import ModbusClient
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 
-class EnhancedModbusClient(ModbusClient):
+class CustomModbusClient(ModbusClient):
     """
     Classe Cliente MODBUS
     """
