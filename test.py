@@ -1,14 +1,16 @@
 from time import sleep
 from modbusclient import CustomModbusClient
 
-sleep(5)
 client = CustomModbusClient(server_ip='192.168.0.14', port=502)
+
 client.set_seldriver(2)
 client.set_freq(60)
 client.set_invstart(1)
+
+sleep(3)
 print(client.fetch_data())
 
-sleep(10)
+sleep(7)
 client.set_freq(30)
 
 sleep(15)
