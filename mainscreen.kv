@@ -1,0 +1,237 @@
+#:kivy 2.3.0
+#:import utils kivy.utils
+
+<MainScreen>:
+    BoxLayout:
+        orientation: 'horizontal'
+        canvas:
+            Color:
+                rgb: 0.5,0.5,0.5
+            Rectangle:
+                size: self.size
+        FloatLayout:
+            size_hint: (1,1)
+            canvas.before:
+                Color:
+                    rgb: utils.get_color_from_hex('#E0E0E0')
+                Rectangle:
+                    size: self.size
+            PlantLayout:
+                pos: (200, 230)
+                size_hint: (None,None)
+
+            BoxLayout:
+                orientation: 'vertical'
+                pos: (180,450)
+                size: (180,180)
+                size_hint: (None,None)
+                spacing: 10
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 3
+                    size_hint_y: None
+                    height: 40
+                    Label:
+                        text: 'Torque'
+                        halign: "left"
+                        text_size: self.size
+                        color: utils.get_color_from_hex('#3F3F3F')
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        Label:
+                            id: co.torque
+                            color: utils.get_color_from_hex('#475CA7')
+                            halign: "right"
+                            text_size: self.size
+                            text: '-'
+                        Label:
+                            color: utils.get_color_from_hex('#919191')
+                            halign: "right"
+                            text_size: self.size
+                            text: ' Nm'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 3
+                    size_hint_y: None
+                    height: 40
+                    Label:
+                        text: 'Velocidade'
+                        halign: "left"
+                        text_size: self.size
+                        color: utils.get_color_from_hex('#3F3F3F')
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        Label:
+                            id: co.vel
+                            color: utils.get_color_from_hex('#475CA7')
+                            halign: "right"
+                            text_size: self.size
+                            text: '-'
+                        Label:
+                            color: utils.get_color_from_hex('#919191')
+                            halign: "right"
+                            text_size: self.size
+                            text: ' RPM'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 3
+                    size_hint_y: None
+                    height: 40
+                    Label:
+                        text: 'Temp. da carcaça'
+                        halign: "left"
+                        text_size: self.size
+                        color: utils.get_color_from_hex('#3F3F3F')
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        Label:
+                            id: co.temp_carc
+                            color: utils.get_color_from_hex('#475CA7')
+                            halign: "right"
+                            text_size: self.size
+                            text: '-'
+                        Label:
+                            color: utils.get_color_from_hex('#919191')
+                            halign: "right"
+                            text_size: self.size
+                            text: ' °C'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 3
+                    size_hint_y: None
+                    height: 40
+                    Label:
+                        text: 'Temp. da fase R'
+                        halign: "left"
+                        text_size: self.size
+                        color: utils.get_color_from_hex('#3F3F3F')
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        Label:
+                            id: co.temp_r
+                            color: utils.get_color_from_hex('#475CA7')
+                            halign: "right"
+                            text_size: self.size
+                            text: '-'
+                        Label:
+                            color: utils.get_color_from_hex('#919191')
+                            halign: "right"
+                            text_size: self.size
+                            text: ' °C'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 3
+                    size_hint_y: None
+                    height: 40
+                    Label:
+                        text: 'Temp. da fase S'
+                        halign: "left"
+                        text_size: self.size
+                        color: utils.get_color_from_hex('#3F3F3F')
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        Label:
+                            id: co.temp_s
+                            color: utils.get_color_from_hex('#475CA7')
+                            halign: "right"
+                            text_size: self.size
+                            text: '-'
+                        Label:
+                            color: utils.get_color_from_hex('#919191')
+                            halign: "right"
+                            text_size: self.size
+                            text: ' °C'
+                BoxLayout:
+                    orientation: 'vertical'
+                    spacing: 3
+                    size_hint_y: None
+                    height: 40
+                    Label:
+                        text: 'Temp. da fase T'
+                        halign: "left"
+                        text_size: self.size
+                        color: utils.get_color_from_hex('#3F3F3F')
+                    BoxLayout:
+                        orientation: 'horizontal'
+                        Label:
+                            id: co.temp_t
+                            color: utils.get_color_from_hex('#475CA7')
+                            halign: "right"
+                            text_size: self.size
+                            text: '-'
+                        Label:
+                            color: utils.get_color_from_hex('#919191')
+                            halign: "right"
+                            text_size: self.size
+                            text: ' °C'
+            Button:
+                size_hint: (None, None)
+                size: (0.65*62, 0.65*58)
+                background_normal: 'imgs/graph_icon.jpg'
+                background_down: 'imgs/graph_icon.jpg'
+                pos_hint: {'x': 0,'y': 0}
+                on_release:
+                    root._graph.open()
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 10
+            size_hint: (None,1)
+            width: 400
+            padding: [20]
+            Label:
+                text: 'Tipo de partida'
+                halign: "left"
+                text_size: self.size
+                size_hint_y: None
+                height: 50
+            BoxLayout:
+                orientation: 'horizontal'
+                height: 40
+                size_hint_y: None
+                ToggleButton:
+                    id: softstart
+                    text: 'Soft'
+                    group: 'partida'
+                    on_release: root._modbus_client.set_seldriver(1)
+                ToggleButton:
+                    id: invstart
+                    text: 'Inversor'
+                    group: 'partida'
+                    on_release: root._modbus_client.set_seldriver(2)
+                ToggleButton:
+                    id: dirstart
+                    text: 'Direta'
+                    group: 'partida'
+                    on_release: root._modbus_client.set_seldriver(3)
+            Label:
+                text: 'Controle do motor'
+                halign: "left"
+                text_size: self.size
+                size_hint_y: None
+                height: 50
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 5
+                size_hint_y: None
+                height: 40
+                Button:
+                    text: 'Ligar'
+                    on_release: root.start_engine()
+                Button:
+                    text: 'Desligar'
+                    on_release: root.stop_engine()
+                Button:
+                    text: 'Reset'
+                    on_release: root.reset_engine()
+            Button:
+                text: 'Configurações'
+                size_hint_y: None
+                height: 40
+                on_release: root._settings_popup.open()
+            Image:
+                id: img_con
+                size_hint_x: None
+                width: 80
+                source: 'imgs/desconectado.png'
+                pos_hint: {'top': 1, 'right': 1} 

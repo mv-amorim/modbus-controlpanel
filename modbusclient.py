@@ -61,7 +61,7 @@ class CustomModbusClient(ModbusClient):
         registers = self.read_holding_registers(884, 2)
         decoder = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.BIG, wordorder=Endian.LITTLE)
         res = decoder.decode_32bit_float()
-        return res
+        return res*60
        
     def get_tensoes(self):
         registers = self.read_holding_registers(847, 3, )
