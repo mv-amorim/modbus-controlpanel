@@ -16,7 +16,7 @@ class MainApp(App):
         self.sm.add_widget(MainScreen(name='main_screen'))
         self.sm.add_widget(ConnectScreen(name='connect_screen'))
         self.title = 'Supervisório Pneumático'
-        self.sm.current = 'connect_screen'
+        self.sm.current = 'main_screen'
         return self.sm
    
     def on_stop(self):
