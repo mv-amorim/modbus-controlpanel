@@ -12,7 +12,7 @@ global app
 class MainApp(App):
     server_ip = '192.168.0.14'
     server_port = 502
-    scan_time = 500
+    scan_time = 5
     connected = False
 
     def build(self):
@@ -21,7 +21,8 @@ class MainApp(App):
         sm.add_widget(self.main_screen)
         sm.add_widget(ConnectScreen(name='connect_screen'))
         self.title = 'Supervisório Pneumático'
-        sm.current = 'main_screen'
+        sm.current = 'connect_screen'
+        app.sm = sm
         return sm
    
     def on_stop(self):

@@ -62,7 +62,7 @@ class CustomModbusClient(ModbusClient):
         registers = self.read_holding_registers(884, 2)
         decoder = BinaryPayloadDecoder.fromRegisters(registers, byteorder=Endian.BIG, wordorder=Endian.LITTLE)
         res = decoder.decode_32bit_float()
-        return res*60
+        return res
        
     def get_tensoes(self):
         registers = self.read_holding_registers(847, 3, )
@@ -90,9 +90,12 @@ class CustomModbusClient(ModbusClient):
         return { 'pit01': pit01, 'fit02': fit02, 'fit03': fit03 }
 
     def get_xv(self):
-        bits = self.read_holding_registers(712, 1)
-        bits = [int(x) for x in bin(bits)[2:]]
-        return bits[11:16]
+        num = self.read_holding_registers(712, 1)[0]
+        bits = [int(x) for x in bin(num)[2:].zfill(16)]
+        xv = []
+        for i in range(15,9,-1):
+            xv.append(bits[i])
+        return xv
 
     def set_xv(self, xv):
         bits = [0] * 16
@@ -103,6 +106,7 @@ class CustomModbusClient(ModbusClient):
         bits[11] = xv[4]
         bits[10] = xv[5]
         s = ''.join(str(x) for x in bits)
+        print(s)
         self.write_single_register(712, int(s, 2))
         return xv
 
@@ -175,7 +179,7 @@ class CustomModbusClient(ModbusClient):
         res = res | {f'co.{k}': tmp[k] for k in tmp.keys()}
 
         tmp = self.get_xv()
-        res = res | {f'co.xv{i}': tmp[i] for i in tmp}
+        res = res | {f'co.xv{i}': tmp[i-1] for i in range(1,7,1)}
 
         tmp = self.get_temps()
         res = res | {f'co.temp_{k}': tmp[k] for k in tmp.keys()}

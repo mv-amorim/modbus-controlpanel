@@ -27,7 +27,7 @@ class MainScreen(Screen):
         self._settings_popup = SettingsPopup()
         self._disconnected_popup = DisconnectedPopup()
         self._plant_widget = PlantWidget()
-        self.sidebar = Sidebar()
+        self.sidebar = self.ids['sidebar']
                 
     def start_connection(self):
         app = App.get_running_app()
@@ -37,7 +37,7 @@ class MainScreen(Screen):
             Window.set_system_cursor("wait")
             self._modbus_client.open()
             Window.set_system_cursor("arrow")
-            if self._modbus_client.open():
+            if self._modbus_client.is_open:
                 self._update_thread = Thread(target=self.updater)
                 self._update_thread.start()
                 app.connected = True
@@ -51,6 +51,7 @@ class MainScreen(Screen):
         app = App.get_running_app()
         try:
             while self._update_widgets:
+                self._modbus_client.open()
                 self._data['timestamp'] = datetime.now()
                 data = self._modbus_client.fetch_data()
                 self._data['values'] = data
@@ -60,16 +61,19 @@ class MainScreen(Screen):
         except Exception as e:
             print("Erro: ", e.args)
             app.connected = False
-            self._disconnected_popup.open()
-
 
     def update_gui(self):
+        app = App.get_running_app()
+        if not app.connected:
+            self._disconnected_popup.open()
+        self.sidebar.ids['connected'].text = 'Status: ' + ('conectado' if app.connected else 'desconectado')
+
         eng_info = self.ids['eng_info']
-        for tag in eng_info:
+        for tag in eng_info.ids:
             eng_info.ids[tag].text = str(self._data['values'][tag])
         #self.ids['co.fv01'].text = self._data['values']['co.fv01']
-        self.ids['co.fit02'].text = self._data['values']['co.fit02']
-        self.ids['co.fit03'].text = self._data['values']['co.fit03']
+        self.ids['co.fit02'].text = str(self._data['values']['co.fit02'])
+        self.ids['co.fit03'].text = str(self._data['values']['co.fit03'])
         
         match self._data['values']['co.sel_driver']:
             case 1:
@@ -81,10 +85,11 @@ class MainScreen(Screen):
 
         self.sidebar.ids['inv_freq'].value = self._data['values']['co.freq']
         
-        for i in range(1,7,1):
-            open = self._data['values'][f'co.xv{i}'] == 1
-            self._plant_widget.set_xv('open' if open else 'closed', i)
-            self.sidebar.ids[f'xv{i}_switch'].active = open
+
+        # for i in range(1,7,1):
+        #     open = self._data['values'][f'co.xv{i}'] == 1
+        #     #self._plant_widget.set_xv('open' if open else 'closed', i)
+        #     self.sidebar.ids[f'xv{i}_switch'].active = open
         
         #Atualização do gráfico
         pit01_graph = self.ids['pit01_graph']
@@ -95,14 +100,14 @@ class MainScreen(Screen):
         self._update_widgets = False
     
     def start_engine(self):
-        self._plant_widget.set_engine('on')
-        # match self._data['values']['co.sel_driver']:
-        #     case 1:
-        #         self._modbus_client.set_softstart(1)
-        #     case 2:
-        #         self._modbus_client.set_invstart(1)
-        #     case 3:
-        #         self._modbus_client.set_dirstart(1)
+        #self._plant_widget.set_engine('on')
+        match self._data['values']['co.sel_driver']:
+            case 1:
+                self._modbus_client.set_softstart(1)
+            case 2:
+                self._modbus_client.set_invstart(1)
+            case 3:
+                self._modbus_client.set_dirstart(1)
     
     def stop_engine(self):
         #self._plant_widget.set_engine('off')
@@ -125,6 +130,12 @@ class MainScreen(Screen):
                 self._modbus_client.set_dirstart(2)
 
     def switch_xv(self, i):
-        xv = self._modbus_client.get_xv()
-        xv[i-1] = 0 if xv[i-1] == 1 else 1
+        xv = []
+        for j in range(1,7,1):
+            if j != i:
+                val = self._data['values'][f'co.xv{j}']
+            else:
+                val = self._data['values'][f'co.xv{j}']
+                val = 1 if val == 0 else 1
+            xv.append(val)
         self._modbus_client.set_xv(xv)
