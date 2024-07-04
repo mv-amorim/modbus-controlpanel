@@ -1,13 +1,13 @@
 from kivy.uix.screenmanager import Screen
-from popups import SettingsPopup, DataGraphPopup
+from settingspopup import SettingsPopup
+from sidebar import Sidebar
 from kivy.core.window import Window
 from plantwidget import PlantWidget
+from datagraphwidget import DataGraphWidget
 from threading import Thread
 from time import sleep
 from datetime import datetime
-import random 
 from modbusclient import CustomModbusClient
-from timeseriesgraph import TimeSeriesGraph
 from kivy.app import App
 
 tags = ['co.torque', 'co.vel', 'co.temp_r', 'co.temp_s', 'co.temp_t', 'co.temp_carc']
@@ -28,19 +28,9 @@ class MainScreen(Screen):
         self._modbus_client = CustomModbusClient(server_ip=app.server_ip, port=app.server_port)
         self._settings_popup = SettingsPopup()
         self._plant_widget = PlantWidget()
-
-        for i in range(1,7,1):
-            self.ids[f'xv{i}_switch'].bind(active=lambda: self.set_xv(i))
+        self.sidebar = Sidebar()
         
-        '''
-        for key, value in kwargs.get('modbus_addrs').items():
-            if key == 'co.pressao':
-                plot_color = (1,0,0,1)
-            else:
-                plot_color = (random.random(),random.random(),random.random(),1)
-            self._tags[key] = {'addr': value, 'color':plot_color}
-        '''
-        self._graph = DataGraphPopup(self._max_points, (1,0,0,1))
+        self._graph = DataGraphWidget(self._max_points, (1,0,0,1))
         
     def start_connection(self):
         app = App.get_running_app()
@@ -80,18 +70,18 @@ class MainScreen(Screen):
         
         match self._data['values']['co.sel_driver']:
             case 1:
-                self.ids['softstart'].state = 'down'
+                self.sidebar.ids['softstart'].state = 'down'
             case 2:
-                self.ids['invstart'].state = 'down'
+                self.sidebar.ids['invstart'].state = 'down'
             case 3:
-                self.ids['dirstart'].state = 'down'
+                self.sidebar.ids['dirstart'].state = 'down'
 
-        self.ids['inv_freq'].value = self._data['values']['co.freq']
+        self.sidebar.ids['inv_freq'].value = self._data['values']['co.freq']
         
         for i in range(1,7,1):
             open = self._data['values'][f'co.xv{i}'] == 1
             self._plant_widget.set_xv('open' if open else 'closed', i)
-            self.ids[f'xv{i}_switch'].active = open
+            self.sidebar.ids[f'xv{i}_switch'].active = open
         
         #Atualização do gráfico
         self._graph.ids.graph.updateGraph((self._data['timestamp'], self._data['values']['co.pit01']), 0)
@@ -102,13 +92,13 @@ class MainScreen(Screen):
     
     def start_engine(self):
         self._plant_widget.set_engine('on')
-        match self._data['values']['co.sel_driver']:
-            case 1:
-                self._modbus_client.set_softstart(1)
-            case 2:
-                self._modbus_client.set_invstart(1)
-            case 3:
-                self._modbus_client.set_dirstart(1)
+        # match self._data['values']['co.sel_driver']:
+        #     case 1:
+        #         self._modbus_client.set_softstart(1)
+        #     case 2:
+        #         self._modbus_client.set_invstart(1)
+        #     case 3:
+        #         self._modbus_client.set_dirstart(1)
     
     def stop_engine(self):
         #self._plant_widget.set_engine('off')

@@ -1,3 +1,4 @@
+import os
 from kivy.app import App
 from mainscreen import MainScreen
 from connectscreen import ConnectScreen
@@ -6,32 +7,31 @@ from kivy.lang.builder import Builder
 from kivy.core.window import Window  # consigo definir o tamnho da janela5
 from kivy.config import Config
 
+global app
+
 class MainApp(App):
     server_ip = '192.168.0.14'
     server_port = 502
     scan_time = 500
 
     def build(self):
-        self.sm = ScreenManager()
-        self.sm.add_widget(MainScreen(name='main_screen'))
-        self.sm.add_widget(ConnectScreen(name='connect_screen'))
+        sm = ScreenManager()
+        self.main_screen = MainScreen(name='main_screen')
+        sm.add_widget(self.main_screen)
+        sm.add_widget(ConnectScreen(name='connect_screen'))
         self.title = 'Supervisório Pneumático'
-        self.sm.current = 'main_screen'
-        return self.sm
+        sm.current = 'main_screen'
+        return sm
    
     def on_stop(self):
-        self.sm.get_screen('main_screen').stop_refresh()
-        
-if __name__ == '__main__':
-    Window.fullscreen = 'auto'  # o aplicativo roda em tela inteira se for auto
-    #Window.size = (1920,1080)  # mudo o tamanho da janela aqui
-    #Window.minimum_width = 1250
-    #Window.minimum_height = 700
-    #Config.set('graphics', 'resizable', 0)
+        self.main_screen.stop_refresh()
 
-    Builder.load_string(open('mainscreen.kv', encoding='utf-8').read(), rulesonly=True)
-    Builder.load_string(open('connectscreen.kv', encoding='utf-8').read(), rulesonly=True)
-    Builder.load_string(open('popups.kv', encoding='utf-8').read(), rulesonly=True)
+if __name__ == '__main__':
+    Window.fullscreen = 'auto'
+
+    for file in os.listdir("./kv"):
+        if file.endswith(".kv"):
+            Builder.load_string(open(os.path.join("./kv", file), encoding='utf-8').read(), rulesonly=True)
     app = MainApp()
     app.run()
 

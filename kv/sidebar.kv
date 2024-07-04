@@ -1,0 +1,174 @@
+#:kivy 2.3.0
+<Sidebar>:
+    orientation: 'vertical'
+    spacing: 10
+    size_hint: (None,1)
+    width: 400
+    padding: [20]
+    Label:
+        text: 'Controle do motor'
+        halign: "left"
+        text_size: self.size
+        size_hint_y: None
+        bold: True
+        font_size: 23
+        height: 50
+    Label:
+        text: 'Tipo de partida'
+        halign: "left"
+        text_size: self.size
+        size_hint_y: None
+        height: 50
+    BoxLayout:
+        orientation: 'horizontal'
+        height: 40
+        size_hint_y: None
+        ToggleButton:
+            id: softstart
+            text: 'Soft'
+            group: 'partida'
+            on_release: app.main_screen._modbus_client.set_seldriver(1)
+        ToggleButton:
+            id: invstart
+            text: 'Inversor'
+            group: 'partida'
+            on_release: app.main_screen._modbus_client.set_seldriver(2)
+        ToggleButton:
+            id: dirstart
+            text: 'Direta'
+            group: 'partida'
+            on_release: app.main_screen._modbus_client.set_seldriver(3)
+    Label:
+        text: 'Controle liga/desliga'
+        halign: "left"
+        text_size: self.size
+        size_hint_y: None
+        height: 50
+    BoxLayout:
+        orientation: 'horizontal'
+        spacing: 5
+        size_hint_y: None
+        height: 40
+        Button:
+            text: 'Ligar'
+            on_release: app.main_screen.start_engine()
+        Button:
+            text: 'Desligar'
+            on_release: app.main_screen.stop_engine()
+        Button:
+            text: 'Reset'
+            on_release: app.main_screen.reset_engine()
+
+    Label:
+        text: 'Frequência do inversor'
+        halign: "left"
+        text_size: self.size
+        size_hint_y: None
+        height: 50
+    BoxLayout:
+        orientation: 'vertical'
+        size_height_y: None
+        height: 70
+        Slider:
+            id: inv_freq
+            min: 0
+            max: 60
+            step: 0.1
+            orientation: 'horizontal'
+            on_touch_up: root.on_slider_release(args[1], self)
+        Label:
+            text: str(round(inv_freq.value,1)) + ' Hz'
+    
+    Label:
+        text: 'Controle de válvulas'
+        halign: "left"
+        text_size: self.size
+        size_hint_y: None
+        bold: True
+        font_size: 23
+        height: 50
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'XV1'
+            halign: 'left'
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        Switch:
+            id: xv1_switch
+            on_touch_up: root.on_switch_release(args[1], self, 1)
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'XV2'
+            halign: "left"
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        Switch:
+            id: xv2_switch
+            on_touch_up: root.on_switch_release(args[1], self, 2)
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'XV3'
+            halign: "left"
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        Switch:
+            id: xv3_switch
+            on_touch_up: root.on_switch_release(args[1], self, 3)
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'XV4'
+            halign: "left"
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        Switch:
+            id: xv4_switch
+            on_touch_up: root.on_switch_release(args[1], self, 4)
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'XV5'
+            halign: "left"
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        Switch:
+            id: xv5_switch
+            on_touch_up: root.on_switch_release(args[1], self, 5)
+
+    BoxLayout:
+        orientation: 'horizontal'
+        Label:
+            text: 'XV6'
+            halign: "left"
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        Switch:
+            id: xv6_switch
+            on_touch_up: root.on_switch_release(args[1], self, 6)
+
+    Button:
+        text: 'Configurações'
+        size_hint_y: None
+        height: 40
+        on_release: app.main_screen._settings_popup.open()
+    
+    Image:
+        id: img_con
+        size_hint_x: None
+        width: 80
+        source: 'imgs/desconectado.png'
+        pos_hint: {'top': 1, 'right': 1} 

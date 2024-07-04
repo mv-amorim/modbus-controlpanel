@@ -14,5 +14,5 @@ class ConnectScreen(Screen):
         app.server_ip = self.ids.txt_ip.text
         app.server_port = int(self.ids.txt_port.text)
         app.scan_time = int(self.ids.txt_st.text)
-        if app.sm.get_screen('main_screen').start_connection():
+        if app.main_screen.get_screen('main_screen').start_connection():
             app.sm.current = 'main_screen'

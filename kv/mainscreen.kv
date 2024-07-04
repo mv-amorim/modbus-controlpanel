@@ -16,32 +16,19 @@
                     rgb: utils.get_color_from_hex('#E0E0E0')
                 Rectangle:
                     size: self.size
+                Color:
+                    rgba: utils.get_color_from_hex('#A0A0A4')
+                Line:
+                    width: 1
+                    rectangle: self.x + 100, self.y + 50, 340, self.height - 100
+                Line:
+                    width: 1
+                    rectangle: self.x + 450, self.y + 50, 340, self.height - 100
+
             PlantWidget:
                 pos: (200, 230)
                 size_hint: (None,None)
-            
-            BoxLayout:
-                size_hint: (None,None)
-                size: (330,self.parent.height - 100)
-                pos: (100,50)
-                canvas.before:
-                    Color:
-                        rgba: utils.get_color_from_hex('#A0A0A4')
-                    Line:
-                        width: 1
-                        rectangle: self.x, self.y, self.width, self.height
-            
-            BoxLayout:
-                size_hint: (None,None)
-                size: (330,self.parent.height - 100)
-                pos: (450,50)
-                canvas.before:
-                    Color:
-                        rgba: utils.get_color_from_hex('#A0A0A4')
-                    Line:
-                        width: 1
-                        rectangle: self.x, self.y, self.width, self.height
-            
+
             Button:
                 id: xv1_btn
                 size_hint: (None,None)
@@ -308,9 +295,6 @@
                         halign: "right"
                         text: ' Nm²/min'
 
-
-            
-
             Button:
                 size_hint: (None, None)
                 size: (0.65*62, 0.65*58)
@@ -320,171 +304,5 @@
                 on_release:
                     root._graph.open()
 
-        BoxLayout:
-            orientation: 'vertical'
-            spacing: 10
-            size_hint: (None,1)
-            width: 400
-            padding: [20]
-            Label:
-                text: 'Controle do motor'
-                halign: "left"
-                text_size: self.size
-                size_hint_y: None
-                bold: True
-                font_size: 23
-                height: 50
-            Label:
-                text: 'Tipo de partida'
-                halign: "left"
-                text_size: self.size
-                size_hint_y: None
-                height: 50
-            BoxLayout:
-                orientation: 'horizontal'
-                height: 40
-                size_hint_y: None
-                ToggleButton:
-                    id: softstart
-                    text: 'Soft'
-                    group: 'partida'
-                    on_release: root._modbus_client.set_seldriver(1)
-                ToggleButton:
-                    id: invstart
-                    text: 'Inversor'
-                    group: 'partida'
-                    on_release: root._modbus_client.set_seldriver(2)
-                ToggleButton:
-                    id: dirstart
-                    text: 'Direta'
-                    group: 'partida'
-                    on_release: root._modbus_client.set_seldriver(3)
-            Label:
-                text: 'Controle liga/desliga'
-                halign: "left"
-                text_size: self.size
-                size_hint_y: None
-                height: 50
-            BoxLayout:
-                orientation: 'horizontal'
-                spacing: 5
-                size_hint_y: None
-                height: 40
-                Button:
-                    text: 'Ligar'
-                    on_release: root.start_engine()
-                Button:
-                    text: 'Desligar'
-                    on_release: root.stop_engine()
-                Button:
-                    text: 'Reset'
-                    on_release: root.reset_engine()
-
-            Label:
-                text: 'Frequência do inversor'
-                halign: "left"
-                text_size: self.size
-                size_hint_y: None
-                height: 50
-            BoxLayout:
-                orientation: 'vertical'
-                size_height_y: None
-                height: 70
-                Slider:
-                    id: inv_freq
-                    min: 0
-                    max: 60
-                    step: 0.1
-                    orientation: 'horizontal'
-                    on_touch_up:
-                        root._modbus_client.set_freq(round(inv_freq.value,1))
-                Label:
-                    text: str(round(inv_freq.value,1)) + ' Hz'
-            
-            Label:
-                text: 'Controle de válvulas'
-                halign: "left"
-                text_size: self.size
-                size_hint_y: None
-                bold: True
-                font_size: 23
-                height: 50
-
-            BoxLayout:
-                orientation: 'horizontal'
-                Label:
-                    text: 'XV1'
-                    halign: 'left'
-                    valign: 'middle'
-                    size_hint: (1,1)
-                    text_size: self.size
-                Switch:
-                    id: xv1_switch
-
-            BoxLayout:
-                orientation: 'horizontal'
-                Label:
-                    text: 'XV2'
-                    halign: "left"
-                    valign: 'middle'
-                    size_hint: (1,1)
-                    text_size: self.size
-                Switch:
-                    id: xv2_switch
-
-            BoxLayout:
-                orientation: 'horizontal'
-                Label:
-                    text: 'XV3'
-                    halign: "left"
-                    valign: 'middle'
-                    size_hint: (1,1)
-                    text_size: self.size
-                Switch:
-                    id: xv3_switch
-
-            BoxLayout:
-                orientation: 'horizontal'
-                Label:
-                    text: 'XV4'
-                    halign: "left"
-                    valign: 'middle'
-                    size_hint: (1,1)
-                    text_size: self.size
-                Switch:
-                    id: xv4_switch
-
-            BoxLayout:
-                orientation: 'horizontal'
-                Label:
-                    text: 'XV5'
-                    halign: "left"
-                    valign: 'middle'
-                    size_hint: (1,1)
-                    text_size: self.size
-                Switch:
-                    id: xv5_switch
-
-            BoxLayout:
-                orientation: 'horizontal'
-                Label:
-                    text: 'XV6'
-                    halign: "left"
-                    valign: 'middle'
-                    size_hint: (1,1)
-                    text_size: self.size
-                Switch:
-                    id: xv6_switch
-
-            Button:
-                text: 'Configurações'
-                size_hint_y: None
-                height: 40
-                on_release: root._settings_popup.open()
-            
-            Image:
-                id: img_con
-                size_hint_x: None
-                width: 80
-                source: 'imgs/desconectado.png'
-                pos_hint: {'top': 1, 'right': 1} 
+        Sidebar:
+            id: sidebar
