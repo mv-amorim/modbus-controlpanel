@@ -13,6 +13,7 @@ class MainApp(App):
     server_ip = '192.168.0.14'
     server_port = 502
     scan_time = 500
+    connected = False
 
     def build(self):
         sm = ScreenManager()

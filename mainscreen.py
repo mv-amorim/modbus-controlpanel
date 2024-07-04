@@ -1,5 +1,5 @@
 from kivy.uix.screenmanager import Screen
-from settingspopup import SettingsPopup
+from popups import SettingsPopup, DisconnectedPopup
 from sidebar import Sidebar
 from kivy.core.window import Window
 from plantwidget import PlantWidget
@@ -9,8 +9,6 @@ from time import sleep
 from datetime import datetime
 from modbusclient import CustomModbusClient
 from kivy.app import App
-
-tags = ['co.torque', 'co.vel', 'co.temp_r', 'co.temp_s', 'co.temp_t', 'co.temp_carc']
 
 class MainScreen(Screen):
     _update_thread = None
@@ -27,11 +25,10 @@ class MainScreen(Screen):
         app = App.get_running_app()
         self._modbus_client = CustomModbusClient(server_ip=app.server_ip, port=app.server_port)
         self._settings_popup = SettingsPopup()
+        self._disconnected_popup = DisconnectedPopup()
         self._plant_widget = PlantWidget()
         self.sidebar = Sidebar()
-        
-        self._graph = DataGraphWidget(self._max_points, (1,0,0,1))
-        
+                
     def start_connection(self):
         app = App.get_running_app()
         self._modbus_client.host = app.server_ip
@@ -43,11 +40,10 @@ class MainScreen(Screen):
             if self._modbus_client.open():
                 self._update_thread = Thread(target=self.updater)
                 self._update_thread.start()
-                self.ids.img_con.source = 'imgs/conectado.png'
+                app.connected = True
                 return True
             else:
-                pass
-                #alert("Falha na conexão com o servidor.")
+                app.connected = False
         except Exception as e:
             print("Erro: ", e.args)
     
@@ -63,10 +59,17 @@ class MainScreen(Screen):
                 sleep(app.scan_time / 1000)
         except Exception as e:
             print("Erro: ", e.args)
+            app.connected = False
+            self._disconnected_popup.open()
+
 
     def update_gui(self):
-        for t in tags:
-            self.ids[t].text = str(self._data['values'][t])
+        eng_info = self.ids['eng_info']
+        for tag in eng_info:
+            eng_info.ids[tag].text = str(self._data['values'][tag])
+        #self.ids['co.fv01'].text = self._data['values']['co.fv01']
+        self.ids['co.fit02'].text = self._data['values']['co.fit02']
+        self.ids['co.fit03'].text = self._data['values']['co.fit03']
         
         match self._data['values']['co.sel_driver']:
             case 1:
@@ -84,7 +87,8 @@ class MainScreen(Screen):
             self.sidebar.ids[f'xv{i}_switch'].active = open
         
         #Atualização do gráfico
-        self._graph.ids.graph.updateGraph((self._data['timestamp'], self._data['values']['co.pit01']), 0)
+        pit01_graph = self.ids['pit01_graph']
+        pit01_graph.updateGraph((self._data['timestamp'], self._data['values']['co.pit01']), 0)
     
     def stop_refresh(self):
         self._modbus_client.close()

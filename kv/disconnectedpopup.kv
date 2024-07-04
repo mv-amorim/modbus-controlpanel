@@ -1,0 +1,73 @@
+#:kivy 2.3.0
+<DisconnectedPopup>:
+    title: "Falha de conexão"
+    size_hint: (None,None)
+    size: (400,300)
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint_y: None
+        height: 320
+        Label:
+            text: "Endereço IP"
+            text_size: self.size
+            size_hint_y: None
+            height: 40
+            padding: [0,0,0,5]
+            font_size: 14
+        TextInput:
+            id: txt_ip
+            text: "127.0.0.1"
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            height: 30
+            size_hint_y: None
+            multiline: False
+            write_tab: False
+            on_text_validate:
+                root.submit()
+        Label:
+            text: "Porta"
+            text_size: self.size
+            size_hint_y: None
+            height: 40
+            padding: [0,0,0,5]
+            font_size: 14
+        TextInput:
+            id: txt_port
+            text: "502"
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            height: 30
+            size_hint_y: None
+            multiline: False
+            write_tab: False
+            input_filter: 'int'
+            on_text_validate:
+                root.submit()
+        Label:
+            text: "ScanTime [ms]"
+            text_size: self.size
+            size_hint_y: None
+            height: 40
+            padding: [0,0,0,5]
+            font_size: 14
+        TextInput:
+            id: txt_st
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            height: 30
+            size_hint_y: None
+            multiline: False
+            write_tab: False
+            input_filter: 'int'
+            on_text_validate:
+                root.submit()
+        Button:
+            size_hint_y: None
+            height: 40
+            text: "Tentar novamente"
+            on_release:
+                root.submit()

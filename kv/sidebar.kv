@@ -4,7 +4,12 @@
     spacing: 10
     size_hint: (None,1)
     width: 400
-    padding: [20]
+    padding: [30]
+    Label:
+        text_size: self.size
+        size_hint_y: None
+        height: 20
+        text: 'Status: ' + ('conectado' if app.connected else 'desconectado')
     Label:
         text: 'Controle do motor'
         halign: "left"
@@ -39,7 +44,7 @@
             group: 'partida'
             on_release: app.main_screen._modbus_client.set_seldriver(3)
     Label:
-        text: 'Controle liga/desliga'
+        text: 'Liga/desliga'
         halign: "left"
         text_size: self.size
         size_hint_y: None
@@ -165,10 +170,3 @@
         size_hint_y: None
         height: 40
         on_release: app.main_screen._settings_popup.open()
-    
-    Image:
-        id: img_con
-        size_hint_x: None
-        width: 80
-        source: 'imgs/desconectado.png'
-        pos_hint: {'top': 1, 'right': 1} 

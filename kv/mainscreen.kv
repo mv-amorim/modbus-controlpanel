@@ -77,152 +77,10 @@
                 background_color: 0, 0, 0, 0
                 on_release: root.switch_xv(6)
 
-            BoxLayout:
-                id: info_motor
-                orientation: 'vertical'
-                pos: (180,450)
-                size: (180,180)
-                size_hint: (None,None)
-                spacing: 10
-                BoxLayout:
-                    orientation: 'vertical'
-                    spacing: 3
-                    size_hint_y: None
-                    height: 40
-                    Label:
-                        text: 'Torque'
-                        halign: "left"
-                        text_size: self.size
-                        color: utils.get_color_from_hex('#3F3F3F')
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        Label:
-                            id: co.torque
-                            color: utils.get_color_from_hex('#475CA7')
-                            halign: "right"
-                            text_size: self.size
-                            text: '-'
-                        Label:
-                            color: utils.get_color_from_hex('#919191')
-                            halign: "right"
-                            text_size: self.size
-                            text: ' Nm'
-                BoxLayout:
-                    orientation: 'vertical'
-                    spacing: 3
-                    size_hint_y: None
-                    height: 40
-                    Label:
-                        text: 'Velocidade'
-                        halign: "left"
-                        text_size: self.size
-                        color: utils.get_color_from_hex('#3F3F3F')
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        Label:
-                            id: co.vel
-                            color: utils.get_color_from_hex('#475CA7')
-                            halign: "right"
-                            text_size: self.size
-                            text: '-'
-                        Label:
-                            color: utils.get_color_from_hex('#919191')
-                            halign: "right"
-                            text_size: self.size
-                            text: ' RPM'
-                BoxLayout:
-                    orientation: 'vertical'
-                    spacing: 3
-                    size_hint_y: None
-                    height: 40
-                    Label:
-                        text: 'Temp. da carcaça'
-                        halign: "left"
-                        text_size: self.size
-                        color: utils.get_color_from_hex('#3F3F3F')
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        Label:
-                            id: co.temp_carc
-                            color: utils.get_color_from_hex('#475CA7')
-                            halign: "right"
-                            text_size: self.size
-                            text: '-'
-                        Label:
-                            color: utils.get_color_from_hex('#919191')
-                            halign: "right"
-                            text_size: self.size
-                            text: ' °C'
-                BoxLayout:
-                    orientation: 'vertical'
-                    spacing: 3
-                    size_hint_y: None
-                    height: 40
-                    Label:
-                        text: 'Temp. da fase R'
-                        halign: "left"
-                        text_size: self.size
-                        color: utils.get_color_from_hex('#3F3F3F')
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        Label:
-                            id: co.temp_r
-                            color: utils.get_color_from_hex('#475CA7')
-                            halign: "right"
-                            text_size: self.size
-                            text: '-'
-                        Label:
-                            color: utils.get_color_from_hex('#919191')
-                            halign: "right"
-                            text_size: self.size
-                            text: ' °C'
-                BoxLayout:
-                    orientation: 'vertical'
-                    spacing: 3
-                    size_hint_y: None
-                    height: 40
-                    Label:
-                        text: 'Temp. da fase S'
-                        halign: "left"
-                        text_size: self.size
-                        color: utils.get_color_from_hex('#3F3F3F')
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        Label:
-                            id: co.temp_s
-                            color: utils.get_color_from_hex('#475CA7')
-                            halign: "right"
-                            text_size: self.size
-                            text: '-'
-                        Label:
-                            color: utils.get_color_from_hex('#919191')
-                            halign: "right"
-                            text_size: self.size
-                            text: ' °C'
-                BoxLayout:
-                    orientation: 'vertical'
-                    spacing: 3
-                    size_hint_y: None
-                    height: 40
-                    Label:
-                        text: 'Temp. da fase T'
-                        halign: "left"
-                        text_size: self.size
-                        color: utils.get_color_from_hex('#3F3F3F')
-                    BoxLayout:
-                        orientation: 'horizontal'
-                        Label:
-                            id: co.temp_t
-                            color: utils.get_color_from_hex('#475CA7')
-                            halign: "right"
-                            text_size: self.size
-                            text: '-'
-                        Label:
-                            color: utils.get_color_from_hex('#919191')
-                            halign: "right"
-                            text_size: self.size
-                            text: ' °C'
-            
+            EngineInfoWidget:
+                pos: (180,100)
+                id: eng_info
+
             BoxLayout:
                 orientation: 'vertical'
                 spacing: 3
@@ -294,15 +152,34 @@
                         color: utils.get_color_from_hex('#919191')
                         halign: "right"
                         text: ' Nm²/min'
-
-            Button:
+            
+            BoxLayout:
+                orientation: 'vertical'
                 size_hint: (None, None)
-                size: (0.65*62, 0.65*58)
-                background_normal: 'imgs/graph_icon.jpg'
-                background_down: 'imgs/graph_icon.jpg'
-                pos_hint: {'x': 0,'y': 0}
-                on_release:
-                    root._graph.open()
+                size: (150,180)
+                pos: (550, 500)
+                TimeSeriesGraph:
+                    id: pit01_graph
+                    size_hint: (None,None)
+                    size: (150,150) 
+                    x_ticks_minor: 1
+                    x_ticks_major: 5
+                    y_ticks_major: 100
+                    y_grid_label: False
+                    x_grid_label: False
+                    x_grid: True
+                    y_grid: True
+                    xmin: 0
+                    ymin: 0
+                    ymax: 600
+                    tick_color: utils.get_color_from_hex('#A0A0A4')
+                    border_color: utils.get_color_from_hex('#A0A0A4')
+                Label:
+                    text: 'PIT-01'
+                    halign: "left"
+                    color: utils.get_color_from_hex('#3F3F3F')
+                    size_hint_y: None
+                    height: 15
 
         Sidebar:
             id: sidebar
