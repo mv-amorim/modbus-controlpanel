@@ -6,6 +6,7 @@ class CustomModbusClient(ModbusClient):
     """
     Classe Cliente MODBUS
     """
+
     def __init__(self, server_ip, port):
         super().__init__(host=server_ip, port=port)
 
@@ -89,7 +90,7 @@ class CustomModbusClient(ModbusClient):
         return { 'pit01': pit01, 'fit02': fit02, 'fit03': fit03 }
 
     def get_xv(self):
-        bits = self.read_holding_registers(712, 1)[0]
+        bits = self.read_holding_registers(712, 1)
         bits = [int(x) for x in bin(bits)[2:]]
         return bits[11:16]
 
@@ -155,7 +156,7 @@ class CustomModbusClient(ModbusClient):
        
     def set_freq(self, vel):
         if vel >= 0 and vel <= 60:
-            self.write_single_register(1313, vel*10)
+            self.write_single_register(1313, int(vel*10))
             return vel
         else:
             return
@@ -163,6 +164,7 @@ class CustomModbusClient(ModbusClient):
     def fetch_data(self):
         res = {}
         res['co.vel'] = self.get_vel()
+        res['co.freq'] = self.get_freq()
         res['co.sel_driver'] = self.get_seldriver()
         res['co.inv_start'] = self.get_invstart()
         res['co.dir_start'] = self.get_dirstart()

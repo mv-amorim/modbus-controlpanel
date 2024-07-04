@@ -1,7 +1,7 @@
 from kivy.uix.screenmanager import Screen
 from popups import SettingsPopup, DataGraphPopup
 from kivy.core.window import Window
-from plantwidget import PlantLayout
+from plantwidget import PlantWidget
 from threading import Thread
 from time import sleep
 from datetime import datetime
@@ -27,7 +27,10 @@ class MainScreen(Screen):
         app = App.get_running_app()
         self._modbus_client = CustomModbusClient(server_ip=app.server_ip, port=app.server_port)
         self._settings_popup = SettingsPopup()
-        self._plant_layout = PlantLayout()
+        self._plant_widget = PlantWidget()
+
+        for i in range(1,7,1):
+            self.ids[f'xv{i}_switch'].bind(active=lambda: self.set_xv(i))
         
         '''
         for key, value in kwargs.get('modbus_addrs').items():
@@ -83,10 +86,12 @@ class MainScreen(Screen):
             case 3:
                 self.ids['dirstart'].state = 'down'
 
-        #xv = self._modbus_client.get_xv()
-        #for i in range(1,7,1):
-            #state = 'open' if xv[i-1] == 1 else 'closed'
-            #self._plant_widget.set_xv(state, i)
+        self.ids['inv_freq'].value = self._data['values']['co.freq']
+        
+        for i in range(1,7,1):
+            open = self._data['values'][f'co.xv{i}'] == 1
+            self._plant_widget.set_xv('open' if open else 'closed', i)
+            self.ids[f'xv{i}_switch'].active = open
         
         #Atualização do gráfico
         self._graph.ids.graph.updateGraph((self._data['timestamp'], self._data['values']['co.pit01']), 0)
@@ -96,7 +101,7 @@ class MainScreen(Screen):
         self._update_widgets = False
     
     def start_engine(self):
-        #self._plant_widget.set_engine('on')
+        self._plant_widget.set_engine('on')
         match self._data['values']['co.sel_driver']:
             case 1:
                 self._modbus_client.set_softstart(1)
@@ -124,3 +129,8 @@ class MainScreen(Screen):
                 self._modbus_client.set_invstart(2)
             case 3:
                 self._modbus_client.set_dirstart(2)
+
+    def switch_xv(self, i):
+        xv = self._modbus_client.get_xv()
+        xv[i-1] = 0 if xv[i-1] == 1 else 1
+        self._modbus_client.set_xv(xv)

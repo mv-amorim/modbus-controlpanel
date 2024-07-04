@@ -5,9 +5,9 @@ from threading import Thread
 from time import sleep
 import xml.etree.ElementTree as ET
 
-class PlantLayout(BoxLayout):
+class PlantWidget(BoxLayout):
     def __init__(self, **kwargs):
-        super(PlantLayout, self).__init__(**kwargs)
+        super(PlantWidget, self).__init__(**kwargs)
         self.do_rotation = False
         self.do_scale = False
         self.do_translation = False
@@ -36,8 +36,10 @@ class PlantLayout(BoxLayout):
         self.reload()
 
     def reload(self):
-        self.clear_widgets()
-        self.add_widget(SvgWidget(tree=self._tree))
+        #self.clear_widgets()
+        print(self.children)
+        #self.add_widget(SvgWidget(tree=self._tree))
+
 
 class SvgWidget(Scatter):
     def __init__(self, tree, **kwargs):
