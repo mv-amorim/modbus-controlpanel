@@ -1,3 +1,4 @@
+import random
 from pyModbusTCP.client import ModbusClient
 from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
@@ -6,6 +7,7 @@ class CustomModbusClient(ModbusClient):
     """
     Classe Cliente MODBUS
     """
+    # xv = [0,0,0,1,0,1]
 
     def __init__(self, server_ip, port):
         super().__init__(host=server_ip, port=port)
@@ -92,21 +94,19 @@ class CustomModbusClient(ModbusClient):
     def get_xv(self):
         num = self.read_holding_registers(712, 1)[0]
         bits = [int(x) for x in bin(num)[2:].zfill(16)]
-        xv = []
-        for i in range(15,9,-1):
-            xv.append(bits[i])
+        xv = bits[10:16]
+        bits[::-1]
         return xv
 
     def set_xv(self, xv):
         bits = [0] * 16
-        bits[15] = xv[0]
-        bits[14] = xv[1]
-        bits[13] = xv[2]
-        bits[12] = xv[3]
-        bits[11] = xv[4]
-        bits[10] = xv[5]
+        bits[15] = xv[5]
+        bits[14] = xv[4]
+        bits[13] = xv[3]
+        bits[12] = xv[2]
+        bits[11] = xv[1]
+        bits[10] = xv[0]
         s = ''.join(str(x) for x in bits)
-        print(s)
         self.write_single_register(712, int(s, 2))
         return xv
 
@@ -164,7 +164,7 @@ class CustomModbusClient(ModbusClient):
             return vel
         else:
             return
-        
+    
     def fetch_data(self):
         res = {}
         res['co.vel'] = self.get_vel()
@@ -201,4 +201,42 @@ class CustomModbusClient(ModbusClient):
 
         return res
 
+    '''
+    Pra testar com dados falsos
+    def fetch_data(self):
+        res = {}
+        res['co.vel'] = 11.5 #self.get_vel()
+        res['co.freq'] = 24.5 #self.get_freq()
+        res['co.sel_driver'] = 3 #self.get_seldriver()
+        res['co.inv_start'] = 1 #self.get_invstart()
+        res['co.dir_start'] = 1 #self.get_dirstart()
+        res['co.soft_start'] = 1 #self.get_softstart()
+        res['co.torque'] = 12.3 #self.get_torque()
+
+        tmp = {'pit01': random.randint(0,600), 'fv01': 31.5, 'fit02': 32.4, 'fit03': 14.3} #self.get_pressoes()
+        res = res | {f'co.{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = self.xv #self.get_xv()
+        res = res | {f'co.xv{i}': tmp[i-1] for i in range(1,7,1)}
+
+        tmp = { 'r': 74, 's': 84, 't': 94, 'carc': 500 } #self.get_temps()
+        res = res | {f'co.temp_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = { 'rs': 274, 'st': 284, 'tr': 294 } #self.get_tensoes()
+        res = res | {f'co.tensao_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = { 'r': 5, 's': 9, 't': 4, 'tot': 18 } #self.get_pot_atv()
+        res = res | {f'co.ativa_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = { 'r': 3, 's': 7, 't': 2, 'tot': 12 } #self.get_pot_reat()
+        res = res | {f'co.reativa_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = { 'r': 4, 's': 1, 't': 5, 'tot': 10 } #self.get_pot_apar()
+        res = res | {f'co.aparente_{k}': tmp[k] for k in tmp.keys()}
+
+        tmp = { 'r': 43, 's': 12, 't': 75, 'n': 31, 'med': 20 } #self.get_correntes()
+        res = res | {f'co.corrente_{k}': tmp[k] for k in tmp.keys()}
+
+        return res
+    '''
         

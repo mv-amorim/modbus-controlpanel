@@ -1,284 +1,340 @@
 #:kivy 2.3.0
 <EngineInfoWidget@BoxLayout>:
     id: info_motor
-    orientation: 'vertical'
-    size: (180,500)
+    orientation: 'horizontal'
+    size: (400,400)
     size_hint: (None,None)
-    spacing: 10
+    spacing: 80
     BoxLayout:
         orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Torque'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
+        spacing: 10
         BoxLayout:
-            orientation: 'horizontal'
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
             Label:
-                id: co.torque
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
+                text: 'Torque'
+                halign: "left"
                 text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' Nm'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Velocidade'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.vel
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' Hz'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Temp. da carcaça'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.temp_carc
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' °C'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Temp. da fase R'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.temp_r
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' °C'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Temp. da fase S'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.temp_s
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' °C'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Corrente na fase R'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.corrente_r
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' A'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Corrente na fase S'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.corrente_s
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' A'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Corrente na fase T'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.corrente_t
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' A'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Corrente de neutro'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.corrente_n
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' A'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Tensão RS'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.tensao_rs
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' V'
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Tensão ST'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                id: co.tensao_st
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
-                text_size: self.size
-                text: '-'
-            Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
-                text_size: self.size
-                text: ' V'
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.torque
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' Nm'
 
-    BoxLayout:
-        orientation: 'vertical'
-        spacing: 3
-        size_hint_y: None
-        height: 40
-        Label:
-            text: 'Tensão TR'
-            halign: "left"
-            text_size: self.size
-            color: utils.get_color_from_hex('#3F3F3F')
         BoxLayout:
-            orientation: 'horizontal'
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
             Label:
-                id: co.tensao_rs
-                color: utils.get_color_from_hex('#475CA7')
-                halign: "right"
+                text: 'Velocidade'
+                halign: "left"
                 text_size: self.size
-                text: '-'
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.vel
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' Hz'
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
             Label:
-                color: utils.get_color_from_hex('#919191')
-                halign: "right"
+                text: 'Corrente na fase R'
+                halign: "left"
                 text_size: self.size
-                text: ' V'
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.corrente_r
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' A'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Corrente na fase S'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.corrente_s
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' A'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Corrente na fase T'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.corrente_t
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' A'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Corrente de neutro'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.corrente_n
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' A'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Corrente média'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.corrente_med
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' A'
+        
+    BoxLayout:
+        orientation:'vertical'
+        spacing: 10
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Tensão RS'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.tensao_rs
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' V'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Tensão ST'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.tensao_st
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' V'
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Tensão TR'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.tensao_tr
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' V'
+
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Temp. da carcaça'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.temp_carc
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' °C'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Temp. da fase R'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.temp_r
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' °C'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Temp. da fase S'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.temp_s
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' °C'
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 3
+            size_hint_y: None
+            height: 40
+            Label:
+                text: 'Temp. da fase T'
+                halign: "left"
+                text_size: self.size
+                color: utils.get_color_from_hex('#3F3F3F')
+            BoxLayout:
+                orientation: 'horizontal'
+                Label:
+                    id: co.temp_t
+                    color: utils.get_color_from_hex('#475CA7')
+                    halign: "right"
+                    text_size: self.size
+                    text: '-'
+                Label:
+                    color: utils.get_color_from_hex('#919191')
+                    halign: "right"
+                    text_size: self.size
+                    text: ' °C'

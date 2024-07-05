@@ -4,15 +4,14 @@ from mainscreen import MainScreen
 from connectscreen import ConnectScreen
 from kivy.uix.screenmanager import ScreenManager
 from kivy.lang.builder import Builder
-from kivy.core.window import Window  # consigo definir o tamnho da janela5
-from kivy.config import Config
+from kivy.core.window import Window
 
 global app
 
 class MainApp(App):
     server_ip = '192.168.0.14'
     server_port = 502
-    scan_time = 5
+    scan_time = 500
     connected = False
 
     def build(self):

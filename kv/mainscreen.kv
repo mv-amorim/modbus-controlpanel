@@ -20,20 +20,20 @@
                     rgba: utils.get_color_from_hex('#A0A0A4')
                 Line:
                     width: 1
-                    rectangle: self.x + 100, self.y + 50, 540, self.height - 100
+                    rectangle: self.x + 100, self.y + 50, 530, self.height - 100
                 Line:
                     width: 1
-                    rectangle: self.x + 650, self.y + 50, 340, self.height - 100
+                    rectangle: self.x + 640, self.y + 50, 340, self.height - 100
 
             PlantWidget:
-                pos: (400, 230)
-                size_hint: (None,None)
+                id: plant
+                size_hint: (1,1)
 
             Button:
                 id: xv1_btn
                 size_hint: (None,None)
                 size: (60,40)
-                pos: (1318,850)
+                pos: (1320,849)
                 background_color: 0, 0, 0, 0
                 on_release: root.switch_xv(1)
             
@@ -41,7 +41,7 @@
                 id: xv2_btn
                 size_hint: (None,None)
                 size: (60,40)
-                pos: (1318,730)
+                pos: (1320,725)
                 background_color: 0, 0, 0, 0
                 on_release: root.switch_xv(2)
 
@@ -49,7 +49,7 @@
                 id: xv3_btn
                 size_hint: (None,None)
                 size: (60,40)
-                pos: (1318,611)
+                pos: (1320,603)
                 background_color: 0, 0, 0, 0
                 on_release: root.switch_xv(3)
             
@@ -57,7 +57,7 @@
                 id: xv4_btn
                 size_hint: (None,None)
                 size: (60,40)
-                pos: (1318,492)
+                pos: (1320,480)
                 background_color: 0, 0, 0, 0
                 on_release: root.switch_xv(4)
             
@@ -65,7 +65,7 @@
                 id: xv5_btn
                 size_hint: (None,None)
                 size: (60,40)
-                pos: (1318,373)
+                pos: (1320,357)
                 background_color: 0, 0, 0, 0
                 on_release: root.switch_xv(5)
 
@@ -73,12 +73,12 @@
                 id: xv6_btn
                 size_hint: (None,None)
                 size: (60,40)
-                pos: (1318,255)
+                pos: (1320,234)
                 background_color: 0, 0, 0, 0
                 on_release: root.switch_xv(6)
 
             EngineInfoWidget:
-                pos: (180,100)
+                pos: (160,400)
                 id: eng_info
 
             BoxLayout:
@@ -157,7 +157,7 @@
                 orientation: 'vertical'
                 size_hint: (None, None)
                 size: (150,180)
-                pos: (750, 500)
+                pos: (730, 500)
                 TimeSeriesGraph:
                     id: pit01_graph
                     size_hint: (None,None)
