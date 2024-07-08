@@ -1,6 +1,5 @@
 #:kivy 2.3.0
 #:import utils kivy.utils
-
 <MainScreen>:
     BoxLayout:
         orientation: 'horizontal'
@@ -78,8 +77,12 @@
                 on_release: root.switch_xv(6)
 
             EngineInfoWidget:
-                pos: (160,400)
                 id: eng_info
+                pos: (160,400)
+
+            TablePot:
+                id: table_pot
+                pos: (150,100)
 
             BoxLayout:
                 orientation: 'vertical'
@@ -153,33 +156,15 @@
                         halign: "right"
                         text: ' Nm²/min'
             
-            BoxLayout:
-                orientation: 'vertical'
-                size_hint: (None, None)
-                size: (150,180)
-                pos: (730, 500)
-                TimeSeriesGraph:
-                    id: pit01_graph
-                    size_hint: (None,None)
-                    size: (150,150) 
-                    x_ticks_minor: 1
-                    x_ticks_major: 5
-                    y_ticks_major: 100
-                    y_grid_label: False
-                    x_grid_label: False
-                    x_grid: True
-                    y_grid: True
-                    xmin: 0
-                    ymin: 0
-                    ymax: 600
-                    tick_color: utils.get_color_from_hex('#A0A0A4')
-                    border_color: utils.get_color_from_hex('#A0A0A4')
-                Label:
-                    text: 'PIT-01'
-                    halign: "left"
-                    color: utils.get_color_from_hex('#3F3F3F')
-                    size_hint_y: None
-                    height: 15
+            SparklineWidget:
+                id: co.pit01
+                pos: (680, 500)
+                title: 'PIT-01'
+                unity: 'kgf/cm²'
+                ymin: 0
+                ymax: 600
+
+                
 
         Sidebar:
             id: sidebar

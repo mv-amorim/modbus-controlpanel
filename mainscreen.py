@@ -1,16 +1,16 @@
+from threading import Thread
+from time import sleep
+from datetime import datetime
+
 from kivy.uix.screenmanager import Screen
 from kivy.core.window import Window
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.utils import get_color_from_hex
-from kivy_garden.graph import LinePlot
-from threading import Thread
-from time import sleep
-from datetime import datetime
+
 from modbusclient import CustomModbusClient
 from popups import SettingsPopup, DisconnectedPopup
 
-from timeseriesgraph import TimeSeriesGraph
+from sparklinewidget import SparklineWidget
 from sidebar import Sidebar
 
 class MainScreen(Screen):
@@ -31,11 +31,6 @@ class MainScreen(Screen):
         self._disconnected_popup = DisconnectedPopup()
         self._plant_widget = self.ids['plant']
         self.sidebar = self.ids['sidebar']
-
-        self._pit01_graph = self.ids['pit01_graph']
-        plot = LinePlot(line_width=1.5, color=get_color_from_hex('#475CA7'))
-        self._pit01_graph.add_plot(plot)
-        self._pit01_graph.xmax = 20
                 
     def start_connection(self):
         app = App.get_running_app()
@@ -76,6 +71,10 @@ class MainScreen(Screen):
         eng_info = self.ids['eng_info']
         for tag in eng_info.ids:
             eng_info.ids[tag].text = str(self._data['values'][tag])
+
+        table_pot = self.ids['table_pot']
+        for tag in table_pot.ids:
+            table_pot.ids[tag].text = str(self._data['values'][tag])
         
         #self.ids['co.fv01'].text = self._data['values']['co.fv01']
         fit2 = self._data['values']['co.fit02']
@@ -97,8 +96,6 @@ class MainScreen(Screen):
                 self.sidebar.ids['invstart'].state = 'normal'
                 self.sidebar.ids['dirstart'].state = 'down'
         
-        self._pit01_graph.updateGraph((self._data['timestamp'], self._data['values']['co.pit01']), 0)
-
     def _update_gui(self):
         app = App.get_running_app()
         if not app.connected:
@@ -119,6 +116,9 @@ class MainScreen(Screen):
             case 3:
                 on = self._data['values']['co.dir_start'] == 1
         self._plant_widget.ids.engine.source = 'imgs/engine_on.png' if on else 'imgs/engine_off.png'
+        
+        self.ids['co.pit01'].update_val(self._data['values']['co.pit01'])
+
     
     def stop_refresh(self):
         self._modbus_client.close()

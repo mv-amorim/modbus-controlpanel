@@ -1,0 +1,49 @@
+#:kivy 2.3.0
+<SparklineWidget>:
+    orientation: 'vertical'
+    size_hint: (None,None)
+    size: (240, 150)
+    spacing: 10
+    Label:
+        text: root.title
+        color: utils.get_color_from_hex('#3F3F3F')
+        size_hint_y: None
+        height: 20
+    BoxLayout:
+        orientation: 'horizontal'
+        size_hint: (None,None)
+        size: (240, 120)
+        spacing: 10
+        TimeSeriesGraph:
+            id: graph
+            size_hint: (None,1)
+            width: 150
+            x_grid_label: False
+            y_grid_label: False
+            x_grid: False
+            y_grid: False
+            x_ticks_minor: 1
+            x_ticks_major: 10
+            y_ticks_major: 100
+            draw_border: False
+            xmin: 0
+            xmax: 20
+            ymin: root.ymin
+            ymax: root.ymax
+            tick_color: (0,0,0,0)
+        IndicatorWidget:
+            id: indicator
+            pos_hint: {'center_y':0.475}
+            ymin: root.ymin
+            ymax: root.ymax
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (None,None)
+            size: (75,50)
+            pos_hint: {'center_y': 0.5}
+            Label:
+                color: utils.get_color_from_hex('#475CA7')
+                text: f'{root.val:.2f}'
+            Label:
+                color: utils.get_color_from_hex('#919191')
+                text: root.unity

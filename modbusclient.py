@@ -200,9 +200,12 @@ class CustomModbusClient(ModbusClient):
         res = res | {f'co.corrente_{k}': tmp[k] for k in tmp.keys()}
 
         return res
-
+    
     '''
     Pra testar com dados falsos
+
+    xv = [0,0,0,1,0,0]
+
     def fetch_data(self):
         res = {}
         res['co.vel'] = 11.5 #self.get_vel()
@@ -238,5 +241,11 @@ class CustomModbusClient(ModbusClient):
         res = res | {f'co.corrente_{k}': tmp[k] for k in tmp.keys()}
 
         return res
-    '''
-        
+
+    def open(self):
+        return True
+    
+    @property
+    def is_open(self):
+        return True
+    ''' 

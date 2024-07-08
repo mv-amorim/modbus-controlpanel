@@ -5,11 +5,17 @@
     size_hint: (None,1)
     width: 400
     padding: [30]
-    Label:
-        id: connected
-        text_size: self.size
-        size_hint_y: None
+    BoxLayout:
+        orientation: 'horizontal'
         height: 20
+        size_hint_y: None
+        Label:
+            id: connected
+            text_size: self.size
+        Label:
+            id: time
+            text_size: self.size
+            halign: 'right'
     Label:
         text: 'Controle do motor'
         halign: "left"
@@ -23,7 +29,7 @@
         halign: "left"
         text_size: self.size
         size_hint_y: None
-        height: 50
+        height: 30
     BoxLayout:
         orientation: 'horizontal'
         height: 40
@@ -48,7 +54,7 @@
         halign: "left"
         text_size: self.size
         size_hint_y: None
-        height: 50
+        height: 30
     BoxLayout:
         orientation: 'horizontal'
         spacing: 5
@@ -69,11 +75,13 @@
         halign: "left"
         text_size: self.size
         size_hint_y: None
-        height: 50
+        height: 30
     BoxLayout:
         orientation: 'vertical'
         size_height_y: None
         height: 70
+        spacing: 10
+        padding: [0,10,0,0]
         Slider:
             id: inv_freq
             min: 0
@@ -165,6 +173,12 @@
             id: xv6_switch
             on_touch_up: root.on_switch_release(args[1], self, 6)
 
+    Button:
+        text: 'Banco de Dados'
+        size_hint_y: None
+        height: 40
+        on_release: app.main_screen._settings_popup.open()
+    
     Button:
         text: 'Configurações'
         size_hint_y: None

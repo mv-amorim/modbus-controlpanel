@@ -1,3 +1,114 @@
-<TablePot@GridLayout>:
+#:kivy 2.3.0
+<TablePot@BoxLayout>:
+    orientation: 'vertical'
+    size_hint: (None,None)
+    size: (420,220)
+    spacing: 10
     Label:
-        text: ''
+        text: 'Potência'
+        color: utils.get_color_from_hex('#3F3F3F')
+        size_hint_y: None
+        height: 20
+    GridLayout:
+        rows: 4
+        cols: 5
+        cols_minimum: {0: 80}
+        spacing: [20, 5]
+        padding: [30, 20]
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex('#E8E8E8')
+            Rectangle:
+                size: self.size
+                pos: self.pos
+        Label:
+            text: ''
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+            color: utils.get_color_from_hex('#3F3F3F')
+        Label:
+            text: 'R'
+            halign: "left"
+            color: utils.get_color_from_hex('#919191')
+        Label:
+            text: 'S'
+            color: utils.get_color_from_hex('#919191')
+        Label:
+            text: 'T'
+            color: utils.get_color_from_hex('#919191')
+        Label:
+            text: 'Total'
+            color: utils.get_color_from_hex('#919191')
+        
+
+        Label:
+            text: "Ativa (W)"
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+            color: utils.get_color_from_hex('#3F3F3F')
+        Label:
+            id: co.ativa_r
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.ativa_s
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.ativa_t
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.ativa_tot
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+
+
+        Label:
+            text: "Retiva (VA)"
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+            color: utils.get_color_from_hex('#3F3F3F')
+        Label:
+            id: co.reativa_r
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.reativa_s
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.reativa_t
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.reativa_tot
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        
+
+        Label:
+            text: 'Aparente (VA)'
+            halign: "left"
+            valign: "middle"
+            text_size: self.size
+            color: utils.get_color_from_hex('#3F3F3F')
+        Label:
+            id: co.aparente_r
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.aparente_s
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.aparente_t
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
+        Label:
+            id: co.aparente_tot
+            text: '-'
+            color: utils.get_color_from_hex('#475CA7')
