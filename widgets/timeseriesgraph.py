@@ -11,7 +11,7 @@ class TimeSeriesGraph(Graph):
         Construtor
         """
         super().__init__(**kwargs)
-        self._trigger_time_label = Clock.create_trigger(self._addTimeLabels)
+        self._trigger_time_label = Clock.create_trigger(self._add_time_labels)
         self._timestamps = []
         self._max_points = kwargs.get('max_points')
         self._max_points = 20
@@ -34,14 +34,14 @@ class TimeSeriesGraph(Graph):
         self._trigger_time_label()
 
     
-    def clearLabel(self,*args):
+    def clear_label(self,*args):
         """
         Método que apaga os rótulos do eixo das abscissas
         """
         for lb in self._x_grid_label:
                 lb.text = ''
     
-    def clearPlots(self):
+    def clear_plots(self):
         """
         Método que apaga os plots do gráfico
         """
@@ -51,7 +51,7 @@ class TimeSeriesGraph(Graph):
         except Exception as e:
             print(e.args)
 
-    def _addTimeLabels(self, *args):
+    def _add_time_labels(self, *args):
         """
         Método privado utilizado para atualizar os rótulos do
         eixo das abscissas de acordo com o vetor de timestamps.
@@ -64,7 +64,7 @@ class TimeSeriesGraph(Graph):
         except Exception as e:
             print('Error: ',e.args)
     
-    def setMaxPoints(self, mp, plot_number):
+    def set_max_points(self, mp, plot_number):
         """
         Método utilizado para definir o número máximo de pontos de um 
         determinado plot.
@@ -109,7 +109,7 @@ class TimeSeriesGraph(Graph):
                 if len(self.plots[plot_number].points) >= self._max_points:
                     self.xmax = max(self.plots[plot_number].points)[0]
                 else:
-                    Clock.schedule_once(self.clearLabel)
+                    Clock.schedule_once(self.clear_label)
                 self.update_x_labels()
             else:
                 # Verifica se o número de pontos é maior que zero para atribuir corretamente o índice da medição

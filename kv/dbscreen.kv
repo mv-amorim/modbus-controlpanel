@@ -107,4 +107,19 @@
                 size_hint_y: None
                 height: 40
                 on_release: root.back()
-                
+
+
+<CheckItem>:
+    orientation: 'horizontal'
+    size_hint: (1,None)
+    height: 30
+    spacing: 10
+    CheckBox:
+        id: checkbox
+        size_hint: (None,None)
+        size: (30,30)
+    Label:
+        text: root.text
+        text_size: self.size
+        halign: 'left'
+        valign: 'middle'

@@ -93,8 +93,8 @@ class CustomModbusClient(ModbusClient):
     def get_xv(self):
         num = self.read_holding_registers(712, 1)[0]
         bits = [int(x) for x in bin(num)[2:].zfill(16)]
-        xv = bits[10:16]
-        bits[::-1]
+        bits = bits[::-1]
+        xv = bits[:6]
         return xv
 
     def set_xv(self, xv):

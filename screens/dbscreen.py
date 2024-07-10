@@ -4,9 +4,8 @@ from threading import Thread
 
 from kivy.uix.screenmanager import Screen
 from kivy.app import App
+from kivy.properties import StringProperty
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.checkbox import CheckBox
-from kivy.uix.label import Label
 
 from database.models import DadoCLP
 
@@ -28,23 +27,18 @@ class DBScreen(Screen):
         self._checkboxes = {}
         self._keys = DadoCLP.__table__.columns.keys()[2:]
         for tag in self._keys:
-            item = BoxLayout(orientation='horizontal', size_hint=(1,None), height=30)
-            
-            checkbox = CheckBox()
+            checkitem = CheckItem(text=tag)
+            checkbox = checkitem.ids['checkbox']
             checkbox.bind(active=lambda a,b: self.update_gui())
             self._checkboxes[tag] = checkbox
-
-            label = Label(text=tag, halign="left")
-
-            item.add_widget(self._checkboxes[tag])
-            item.add_widget(label)
-            self.ids['tags'].add_widget(item)
+            self.ids['tags'].add_widget(checkitem)
         
         self._graph = self.ids['graph']
+        self.set_time('24h')
  
     def get_data(self, time_i, time_f, cols):
-        cols.append('timestamp')
         columns = [getattr(DadoCLP, col) for col in cols]
+        columns.append(DadoCLP.timestamp)
         app = App.get_running_app()
         return app.session.query(*columns).filter(DadoCLP.timestamp.between(time_i, time_f)).all()
 
@@ -56,7 +50,7 @@ class DBScreen(Screen):
         for tag in self._keys:
             if self._checkboxes[tag].active:
                 cols.append(tag)
-
+    
         if time_i and time_f and cols.__len__() > 0:
             res = self.get_data(time_i, time_f, cols)
             
@@ -64,11 +58,11 @@ class DBScreen(Screen):
             for tag in cols: data[tag] = []
 
             for reg in res:
-                d = reg.__dict__
-                for tag in cols: data[tag].append((d['timestamp'], d[tag]))
-
-            print(data)
-                
+                for tag in cols: data[tag].append((getattr(reg,'timestamp').timestamp(), getattr(reg, tag)))
+            
+            self._graph.update_plots(data)
+        else:
+            self._graph.clear()
             
 
     def set_time(self, setting):
@@ -100,3 +94,6 @@ class DBScreen(Screen):
             self.ids['time'].text = now.strftime('%H:%M:%S')
             self.ids['connected'].text = 'Status: ' + ('conectado' if app.connected else 'desconectado')
             sleep(1)
+
+class CheckItem(BoxLayout):
+    text = StringProperty()

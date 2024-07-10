@@ -1,8 +1,7 @@
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.label import Label
 from kivy.properties import StringProperty, ColorProperty
-from kivy.graphics import Rectangle, Color
 from kivy_garden.graph import LinePlot
+from kivy.clock import Clock
 from kivy.utils import get_color_from_hex
 
 from widgets.timeseriesgraph import TimeSeriesGraph
@@ -41,43 +40,45 @@ plot_color = {
 class DataGraphWidget(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self._indexes = {}
 
     def add_plot(self, data, label):
         plt = LinePlot(line_width=1.5, color=plot_color[label])
-        self.ids['graph'].add_plot(self.plot)
         plt.points = data
-        index = self.ids['graph'].plots.index(plt)
+        self.ids['graph'].add_plot(plt)
         
-
-        self._indexes[label] = index
-
         leg = Legend(text=label, color=plot_color[label])
-        self._legends[label] = leg
-        self.ids['legend'].add_widget(leg)
-
-    def remove_plot(self, label):
-        index = self._indexes[label]
-        self.ids['graph'].remove_plot(self.ids['graph'].plots[index])
-        if label in self._indexes: del self._indexes[label]
-
-        self.ids['legend'].remove_widget(self._legends[label])
-        if label in self._legends: del self._legends[label]
+        self.ids['legends'].add_widget(leg)
     
     def update_plots(self, all_data):
-        for label in all_data:
-            index = self._indexes[label]
-            self.ids['graph'].update_graph(all_data[label], index)
+        self.clear()
+        graph = self.ids['graph']
+        
+        for key in all_data.keys():
+            self.add_plot(all_data[key], key)
+
+        xmin = []
+        xmax = []
+        ymin = []
+        ymax = []
+        for i in range(graph.plots.__len__()):
+            if graph.plots[i].points:
+                xmin.append(min(graph.plots[i].points)[0])
+                ymin.append(min(graph.plots[i].points)[1])
+                xmax.append(max(graph.plots[i].points)[0])
+                ymax.append(max(graph.plots[i].points)[1])
+
+        if xmin: graph.xmin = min(xmin)
+        if xmax: graph.xmax = max(xmax)
+        if ymin: graph.ymin = min(ymin) - 10
+        if ymax: graph.ymax = max(ymax) + 10
+
+        Clock.schedule_once(graph.clear_label)
+        graph.update_x_labels()
+
+    def clear(self):
+        self.ids['graph'].clear_plots()
+        self.ids['legends'].clear_widgets()
 
 class Legend(BoxLayout):
     color = ColorProperty() 
     text = StringProperty()
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        self.orientation = 'horizontal'
-        
-        txt = Label(text=self.text, pos=(self.x + 30, self.y))
-        with self.canvas:
-            Color(rgb=self.color)
-            Rectangle(size=(30,30), pos=(self.x, self.y))
-
