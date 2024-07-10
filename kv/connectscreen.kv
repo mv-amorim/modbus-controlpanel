@@ -5,7 +5,7 @@
         orientation: 'vertical'
         size: (400,400)
         size_hint: (None, None)
-        pos: (self.parent.width/2 - 200, self.parent.height/2 - 100)
+        pos: (self.parent.width/2 - 200, self.parent.height/2 - 200)
         Label:
             text: "Iniciar conexão"
             text_size: self.size
@@ -73,11 +73,24 @@
                 root.submit()
         BoxLayout:
             orientation: 'vertical'
-            height: 40
-            size_hint: (1,None)
-        Button:
+            height: 240
             size_hint_y: None
-            height: 40
-            text: "Conectar"
-            on_release:
-                root.submit()
+            spacing: 50
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Conectar"
+                on_release:
+                    app.sm.transition.direction = 'left'
+                    root.submit()
+            Label:
+                text: 'ou'
+                size_hint_y: None
+                height: 20
+            Button:
+                size_hint_y: None
+                height: 40
+                text: "Acessar histórico de dados"
+                on_release:
+                    app.sm.transition.direction = 'left'
+                    app.sm.current = 'db_screen'

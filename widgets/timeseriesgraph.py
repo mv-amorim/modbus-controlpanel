@@ -85,7 +85,7 @@ class TimeSeriesGraph(Graph):
         except Exception as e:
             print(e.args)
     
-    def updateGraph(self, meas, plot_number):
+    def update_graph(self, meas, plot_number):
         """
         Método que atualiza os dados de um determinado gráfico
         :param meas: tupla com a medição no formato (datetime,valor)

@@ -5,7 +5,7 @@ from datetime import datetime
 from kivy.uix.boxlayout import BoxLayout
 from kivy.app import App
 
-class Sidebar(BoxLayout):
+class SidebarWidget(BoxLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self._update_clock = True

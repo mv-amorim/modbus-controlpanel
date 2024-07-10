@@ -1,4 +1,4 @@
-from threading import Thread
+from threading import Thread, Lock
 from time import sleep
 from datetime import datetime
 
@@ -7,15 +7,16 @@ from kivy.core.window import Window
 from kivy.app import App
 from kivy.clock import Clock
 
+from database.models import DadoCLP
 from modbusclient import CustomModbusClient
-from popups import SettingsPopup, DisconnectedPopup
 
-from sparklinewidget import SparklineWidget
-from sidebar import Sidebar
+from popups import SettingsPopup, DisconnectedPopup
+from widgets.sparkline import SparklineWidget
+from widgets.sidebar import SidebarWidget
 
 class MainScreen(Screen):
     _update_thread = None
-    _update_widgets = True
+    _do_refresh = True
     _data = {}
     _max_points = 20
     
@@ -30,8 +31,9 @@ class MainScreen(Screen):
         self._settings_popup = SettingsPopup()
         self._disconnected_popup = DisconnectedPopup()
         self._plant_widget = self.ids['plant']
-        self.sidebar = self.ids['sidebar']
-                
+        self._sidebar = self.ids['sidebar']
+
+
     def start_connection(self):
         app = App.get_running_app()
         self._modbus_client.host = app.server_ip
@@ -41,6 +43,7 @@ class MainScreen(Screen):
             self._modbus_client.open()
             Window.set_system_cursor("arrow")
             if self._modbus_client.is_open:
+                self._lock = Lock()
                 self._update_thread = Thread(target=self.updater)
                 self._update_thread.start()
                 app.connected = True
@@ -53,12 +56,13 @@ class MainScreen(Screen):
     def updater(self):
         app = App.get_running_app()
         try:
-            while self._update_widgets:
+            while self._do_refresh:
                 self._modbus_client.open()
                 self._data['timestamp'] = datetime.now()
                 data = self._modbus_client.fetch_data()
                 self._data['values'] = data
                 self.update_gui()
+                self.store_data(session=app.session)
                 # Banco de dados
                 sleep(app.scan_time / 1000)
         except Exception as e:
@@ -84,29 +88,29 @@ class MainScreen(Screen):
         
         match self._data['values']['co.sel_driver']:
             case 1:
-                self.sidebar.ids['softstart'].state = 'down'
-                self.sidebar.ids['invstart'].state = 'normal'
-                self.sidebar.ids['dirstart'].state = 'normal'
+                self._sidebar.ids['softstart'].state = 'down'
+                self._sidebar.ids['invstart'].state = 'normal'
+                self._sidebar.ids['dirstart'].state = 'normal'
             case 2:
-                self.sidebar.ids['softstart'].state = 'normal'
-                self.sidebar.ids['invstart'].state = 'down'
-                self.sidebar.ids['dirstart'].state = 'normal'
+                self._sidebar.ids['softstart'].state = 'normal'
+                self._sidebar.ids['invstart'].state = 'down'
+                self._sidebar.ids['dirstart'].state = 'normal'
             case 3:
-                self.sidebar.ids['softstart'].state = 'normal'
-                self.sidebar.ids['invstart'].state = 'normal'
-                self.sidebar.ids['dirstart'].state = 'down'
+                self._sidebar.ids['softstart'].state = 'normal'
+                self._sidebar.ids['invstart'].state = 'normal'
+                self._sidebar.ids['dirstart'].state = 'down'
         
     def _update_gui(self):
         app = App.get_running_app()
         if not app.connected:
             self._disconnected_popup.open()
-        self.sidebar.ids['connected'].text = 'Status: ' + ('conectado' if app.connected else 'desconectado')
+        self._sidebar.ids['connected'].text = 'Status: ' + ('conectado' if app.connected else 'desconectado')
         
-        self.sidebar.ids['inv_freq'].value = self._data['values']['co.freq']
+        self._sidebar.ids['inv_freq'].value = self._data['values']['co.freq']
         for i in range(1,7,1):
             open = self._data['values'][f'co.xv{i}'] == 1
             self._plant_widget.ids[f'xv{i}'].source = 'imgs/open_valve.png' if open else 'imgs/closed_valve.png'
-            self.sidebar.ids[f'xv{i}_switch'].active = open
+            self._sidebar.ids[f'xv{i}_switch'].active = open
 
         match self._data['values']['co.sel_driver']:
             case 1:
@@ -119,13 +123,31 @@ class MainScreen(Screen):
         
         self.ids['co.pit01'].update_val(self._data['values']['co.pit01'])
 
-    
+    def store_data(self, session):
+        try:
+            data = {
+                'timestamp': self._data['timestamp']
+            }
+
+            keys = DadoCLP.__table__.columns.keys()
+            for key in keys[2:]:
+                data[key] = self._data['values'][f'co.{key}']
+
+            dadoCLP = DadoCLP(**data)
+            with self._lock:
+                session.add(dadoCLP)
+                session.commit()
+        except Exception as e:
+            print("Erro: ", e.args)
+            
     def stop_refresh(self):
+        self._do_refresh = False
+        self._sidebar.stop_refresh()
         self._modbus_client.close()
-        self._update_widgets = False
-    
+
+
     def start_engine(self):
-        self._plant_widget.set_engine('on')
+        self._plant_widget.ids['engine'].source = 'imgs/engine_on.png'
         match self._data['values']['co.sel_driver']:
             case 1:
                 self._modbus_client.set_softstart(1)
@@ -135,7 +157,7 @@ class MainScreen(Screen):
                 self._modbus_client.set_dirstart(1)
     
     def stop_engine(self):
-        self._plant_widget.set_engine('off')
+        self._plant_widget.ids['engine'].source = 'imgs/engine_off.png'
         match self._data['values']['co.sel_driver']:
             case 1:
                 self._modbus_client.set_softstart(0)
@@ -145,7 +167,7 @@ class MainScreen(Screen):
                 self._modbus_client.set_dirstart(0)
     
     def reset_engine(self):
-        self._plant_widget.set_engine('off')
+        self._plant_widget.ids['engine'].source = 'imgs/engine_off.png'
         match self._data['values']['co.sel_driver']:
             case 1:
                 self._modbus_client.set_softstart(2)

@@ -7,7 +7,6 @@ class CustomModbusClient(ModbusClient):
     """
     Classe Cliente MODBUS
     """
-    # xv = [0,0,0,1,0,1]
 
     def __init__(self, server_ip, port):
         super().__init__(host=server_ip, port=port)
@@ -100,12 +99,12 @@ class CustomModbusClient(ModbusClient):
 
     def set_xv(self, xv):
         bits = [0] * 16
-        bits[15] = xv[5]
-        bits[14] = xv[4]
-        bits[13] = xv[3]
-        bits[12] = xv[2]
-        bits[11] = xv[1]
-        bits[10] = xv[0]
+        bits[15] = xv[0]
+        bits[14] = xv[1]
+        bits[13] = xv[2]
+        bits[12] = xv[3]
+        bits[11] = xv[4]
+        bits[10] = xv[5]
         s = ''.join(str(x) for x in bits)
         self.write_single_register(712, int(s, 2))
         return xv
@@ -174,6 +173,7 @@ class CustomModbusClient(ModbusClient):
         res['co.dir_start'] = self.get_dirstart()
         res['co.soft_start'] = self.get_softstart()
         res['co.torque'] = self.get_torque()
+        #res['co.fv01'] = self.get_fv01()
 
         tmp = self.get_pressoes()
         res = res | {f'co.{k}': tmp[k] for k in tmp.keys()}
@@ -201,9 +201,9 @@ class CustomModbusClient(ModbusClient):
 
         return res
     
-    '''
+    ''' 
     Pra testar com dados falsos
-
+    
     xv = [0,0,0,1,0,0]
 
     def fetch_data(self):
@@ -248,4 +248,5 @@ class CustomModbusClient(ModbusClient):
     @property
     def is_open(self):
         return True
-    ''' 
+    '''
+    

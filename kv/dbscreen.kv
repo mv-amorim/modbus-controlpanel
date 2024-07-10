@@ -1,0 +1,110 @@
+#:kivy 2.3.0
+#:import datetime datetime
+<DBScreen>:
+    BoxLayout:
+        orientation: 'horizontal'
+        DataGraphWidget:
+            id: graph    
+        BoxLayout:
+            orientation: 'vertical'
+            spacing: 20
+            size_hint: (None,1)
+            width: 400
+            padding: [30]
+            canvas:
+                Color:
+                    rgb: 0.5,0.5,0.5
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+            BoxLayout:
+                orientation: 'horizontal'
+                height: 20
+                size_hint_y: None
+                Label:
+                    id: connected
+                    text_size: self.size
+                Label:
+                    id: time
+                    size_hint_x: None
+                    width: 100
+                    text_size: self.size
+                    halign: 'right'
+            Label:
+                text: "Tempo"
+                halign: 'left'
+                text_size: self.size
+                bold: True
+                font_size: 23
+                height: 50
+
+            GridLayout:
+                cols: 2
+                rows: 2
+                spacing: 5
+                size_hint_y: None
+                height: 85
+                Button:
+                    text: "Últimos 10min"
+                    on_release: root.set_time('1h')
+                Button:
+                    text: "Última hora"
+                    on_release: root.set_time('1h')
+                Button:
+                    text: "Últimas 24h"
+                    on_release: root.set_time('24h')
+                Button:
+                    text: "Última semana"
+                    on_release: root.set_time('1w')
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 30
+                Label:
+                    text: "Início"
+                    halign: 'left'
+                    valign: 'middle'
+                    size_hint: (None, 1)
+                    width: 90
+                    text_size: self.size
+                DatetimePickerWidget:
+                    id: time_i
+            
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: 30
+                Label:
+                    text: "Fim"
+                    halign: 'left'
+                    valign: 'middle'
+                    size_hint: (None, 1)
+                    width: 90
+                    text_size: self.size
+                DatetimePickerWidget:
+                    id: time_f
+
+            Label:
+                text: "Tags"
+                halign: 'left'
+                text_size: self.size
+                bold: True
+                font_size: 23
+                height: 50
+            
+            GridLayout:
+                cols: 2
+                rows: 14
+                spacing: 5
+                size_hint_y: None
+                height: 500
+                id: tags
+            BoxLayout:
+                orientation: 'horizontal'
+            Button:
+                text: 'Voltar'
+                size_hint_y: None
+                height: 40
+                on_release: root.back()
+                

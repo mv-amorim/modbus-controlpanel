@@ -1,5 +1,5 @@
 #:kivy 2.3.0
-<Sidebar>:
+<SidebarWidget>:
     orientation: 'vertical'
     spacing: 10
     size_hint: (None,1)
@@ -15,6 +15,8 @@
         Label:
             id: time
             text_size: self.size
+            size_hint_x: None
+            width: 100
             halign: 'right'
     Label:
         text: 'Controle do motor'
@@ -174,10 +176,12 @@
             on_touch_up: root.on_switch_release(args[1], self, 6)
 
     Button:
-        text: 'Banco de Dados'
+        text: 'Histórico de dados'
         size_hint_y: None
         height: 40
-        on_release: app.main_screen._settings_popup.open()
+        on_release:
+            app.sm.transition.direction = 'left'
+            app.sm.current = 'db_screen'
     
     Button:
         text: 'Configurações'

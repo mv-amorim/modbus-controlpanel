@@ -5,8 +5,8 @@ from kivy_garden.graph import LinePlot
 from kivy.utils import get_color_from_hex
 from kivy.properties import NumericProperty, StringProperty
 
-from timeseriesgraph import TimeSeriesGraph
-from indicatorwidget import IndicatorWidget
+from widgets.timeseriesgraph import TimeSeriesGraph
+from widgets.indicator import IndicatorWidget
 
 class SparklineWidget(BoxLayout):
     ymin = NumericProperty(0)
@@ -27,4 +27,4 @@ class SparklineWidget(BoxLayout):
     def update_val(self, val):
         self.val = val
         self._indicator.update_val(val)
-        self._graph.updateGraph((datetime.now(), val), 0)
+        self._graph.update_graph((datetime.now(), val), 0)

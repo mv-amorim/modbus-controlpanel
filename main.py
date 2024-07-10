@@ -1,10 +1,14 @@
 import os
 from kivy.app import App
-from mainscreen import MainScreen
-from connectscreen import ConnectScreen
 from kivy.uix.screenmanager import ScreenManager
 from kivy.lang.builder import Builder
 from kivy.core.window import Window
+
+from database.db import Base, Session, engine
+
+from screens.mainscreen import MainScreen
+from screens.connectscreen import ConnectScreen
+from screens.dbscreen import DBScreen
 
 global app
 
@@ -15,13 +19,21 @@ class MainApp(App):
     connected = False
 
     def build(self):
-        sm = ScreenManager()
+        self.title = 'Supervisório Pneumático'
+
+        Base.metadata.create_all(engine)
+        self.session = Session()
+
         self.main_screen = MainScreen(name='main_screen')
+        self.db_screen = DBScreen(name='db_screen')
+        
+        sm = ScreenManager()
         sm.add_widget(self.main_screen)
         sm.add_widget(ConnectScreen(name='connect_screen'))
-        self.title = 'Supervisório Pneumático'
+        sm.add_widget(self.db_screen)
         sm.current = 'connect_screen'
-        app.sm = sm
+        self.sm = sm
+
         return sm
    
     def on_stop(self):

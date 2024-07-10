@@ -1,0 +1,87 @@
+#:kivy 2.3.0
+<DatetimePickerWidget>:
+    orientation: 'horizontal'
+    size_hint: (1,None)
+    height: 30
+    BoxLayout:
+        orientation: 'horizontal'
+        size: (150,30)
+        size_hint: (None,None)
+        NumericInput:
+            id: D
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            size: (30,30)
+            size_hint: (None,None)
+            min_value: 1
+            max_value: 31
+            border: (0,0,0,0)
+            on_text_validate: root.submit()
+        Label:
+            text: '/'
+            halign: 'center'
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        NumericInput:
+            id: M
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            size: (30,30)
+            size_hint: (None,None)
+            min_value: 1
+            max_value: 12
+            border: (0,0,0,0)
+            on_text_validate: root.submit()
+        Label:
+            text: '/'
+            halign: 'center'
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        NumericInput:
+            id: Y
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            size: (50,30)
+            size_hint: (None,None)
+            validate: False
+            border: (0,0,0,0)
+            on_text_validate: root.submit()
+    BoxLayout:
+        orientation: 'vertical'
+    BoxLayout:
+        orientation: 'horizontal'
+        size: (80,30)
+        size_hint: (None,None)
+        NumericInput:
+            id: h
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            size: (30,30)
+            size_hint: (None,None)
+            min_value: 0
+            max_value: 23
+            border: (0,0,0,0)
+            on_text_validate: root.submit()
+        Label:
+            text: ':'
+            halign: 'center'
+            valign: 'middle'
+            size_hint: (1,1)
+            text_size: self.size
+        NumericInput:
+            id: m
+            font_size: 14
+            halign: 'left'
+            valign: 'middle'
+            size: (30,30)
+            size_hint: (None,None)
+            min_value: 0
+            max_value: 59
+            border: (0,0,0,0)
+            on_text_validate: root.submit()
