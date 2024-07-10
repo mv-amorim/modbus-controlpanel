@@ -37,6 +37,7 @@ class MainApp(App):
         return sm
    
     def on_stop(self):
+        self.db_screen._update_clock = False
         self.main_screen.stop_refresh()
 
 if __name__ == '__main__':
