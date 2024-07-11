@@ -1,1 +1,1 @@
-Trabalhinho final de informática industrial
+Trabalho final de informática industrial
