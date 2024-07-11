@@ -37,7 +37,6 @@ class MainScreen(Screen):
         self._plant_widget = self.ids['plant']
         self._sidebar = self.ids['sidebar']
 
-
     def start_connection(self):
         '''
         Método para iniciar a conexão com o servidor MODBUS
@@ -123,6 +122,7 @@ class MainScreen(Screen):
         self._sidebar.ids['connected'].text = 'Status: ' + ('conectado' if app.connected else 'desconectado')
         
         self._sidebar.ids['inv_freq'].value = self._data['values']['co.freq']
+
         for i in range(1,7,1):
             open = self._data['values'][f'co.xv{i}'] == 1
             self._plant_widget.ids[f'xv{i}'].source = 'imgs/open_valve.png' if open else 'imgs/closed_valve.png'
