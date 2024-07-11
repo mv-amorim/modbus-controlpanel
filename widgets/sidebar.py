@@ -8,11 +8,9 @@ from kivy.app import App
 class SidebarWidget(BoxLayout):
     '''
     Widget da barra lateral da MainScreen
-    '''
+    ''' 
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def on_kv_post(self, base_widget):
         # Inicia a Thread de atualização do relógio
         self._update_clock = True
         self._clock_thread = Thread(target=self.update_clock)
