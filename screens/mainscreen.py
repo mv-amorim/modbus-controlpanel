@@ -15,6 +15,10 @@ from widgets.sparkline import SparklineWidget
 from widgets.sidebar import SidebarWidget
 
 class MainScreen(Screen):
+    '''
+    Tela principal do supervisório
+    '''
+
     _update_thread = None
     _do_refresh = True
     _data = {}
@@ -35,6 +39,9 @@ class MainScreen(Screen):
 
 
     def start_connection(self):
+        '''
+        Método para iniciar a conexão com o servidor MODBUS
+        '''
         app = App.get_running_app()
         self._modbus_client.host = app.server_ip
         self._modbus_client.port = app.server_port
@@ -54,6 +61,9 @@ class MainScreen(Screen):
             print("Erro: ", e.args)
     
     def updater(self):
+        '''
+        Método para obter dados a ser executado em segundo plano
+        '''
         app = App.get_running_app()
         try:
             while self._do_refresh:
@@ -70,6 +80,9 @@ class MainScreen(Screen):
             app.connected = False
 
     def update_gui(self):
+        '''
+        Método para atualizar a interface em segundo plano
+        '''
         Clock.schedule_once(lambda dt: self._update_gui())
 
         eng_info = self.ids['eng_info']
@@ -101,6 +114,9 @@ class MainScreen(Screen):
                 self._sidebar.ids['dirstart'].state = 'down'
         
     def _update_gui(self):
+        '''
+        Método para atualizar a interface na Thread principal
+        '''
         app = App.get_running_app()
         if not app.connected:
             self._disconnected_popup.open()
@@ -124,6 +140,9 @@ class MainScreen(Screen):
         self.ids['co.pit01'].update_val(self._data['values']['co.pit01'])
 
     def store_data(self, session):
+        '''
+        Método para armazenar os dados no banco
+        '''
         try:
             data = {
                 'timestamp': self._data['timestamp']
@@ -147,6 +166,9 @@ class MainScreen(Screen):
 
 
     def start_engine(self):
+        '''
+        Método para ligar o motor de acordo com o driver selecionado
+        '''
         self._plant_widget.ids['engine'].source = 'imgs/engine_on.png'
         match self._data['values']['co.sel_driver']:
             case 1:
@@ -157,6 +179,9 @@ class MainScreen(Screen):
                 self._modbus_client.set_dirstart(1)
     
     def stop_engine(self):
+        '''
+        Método para desligar o motor de acordo com o driver selecionado
+        '''
         self._plant_widget.ids['engine'].source = 'imgs/engine_off.png'
         match self._data['values']['co.sel_driver']:
             case 1:
@@ -167,6 +192,9 @@ class MainScreen(Screen):
                 self._modbus_client.set_dirstart(0)
     
     def reset_engine(self):
+        '''
+        Método para resetar o motor de acordo com o driver selecionado
+        '''
         self._plant_widget.ids['engine'].source = 'imgs/engine_off.png'
         match self._data['values']['co.sel_driver']:
             case 1:
@@ -177,6 +205,9 @@ class MainScreen(Screen):
                 self._modbus_client.set_dirstart(2)
 
     def switch_xv(self, i):
+        '''
+        Método para comutar uma válvula
+        '''
         xv = []
         for j in range(1,7,1):
             xv.append(self._data['values'][f'co.xv{j}'])

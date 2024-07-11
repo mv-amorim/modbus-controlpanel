@@ -4,6 +4,10 @@ from kivy.graphics import Color, Triangle
 from kivy.properties import NumericProperty
 
 class IndicatorWidget(Widget):
+    '''
+    Widget do indicador linear
+    '''
+
     ymin = NumericProperty(0)
     ymax = NumericProperty(100)
     increment = NumericProperty(0)

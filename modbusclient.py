@@ -4,9 +4,9 @@ from pymodbus.payload import BinaryPayloadDecoder
 from pymodbus.constants import Endian
 
 class CustomModbusClient(ModbusClient):
-    """
+    '''
     Classe Cliente MODBUS
-    """
+    '''
 
     def __init__(self, server_ip, port):
         super().__init__(host=server_ip, port=port)
@@ -165,6 +165,10 @@ class CustomModbusClient(ModbusClient):
             return
     
     def fetch_data(self):
+        '''
+        Retorna um dicionário contendo todos os dados
+        '''
+
         res = {}
         res['co.vel'] = self.get_vel()
         res['co.freq'] = self.get_freq()

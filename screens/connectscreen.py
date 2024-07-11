@@ -2,6 +2,10 @@ from kivy.uix.screenmanager import Screen
 from kivy.app import App
 
 class ConnectScreen(Screen):
+    '''
+    Tela inicial do app
+    '''
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         app = App.get_running_app()

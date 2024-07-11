@@ -6,6 +6,7 @@ from kivy.utils import get_color_from_hex
 
 from widgets.timeseriesgraph import TimeSeriesGraph
 
+# Cor de cada linha do gráfico
 plot_color = {
     'ativa_r': get_color_from_hex("#898952"),
     'ativa_s': get_color_from_hex("#B2945B"),
@@ -38,10 +39,18 @@ plot_color = {
 }
 
 class DataGraphWidget(BoxLayout):
+    '''
+    Widget do gráfico com legenda
+    '''
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
     def add_plot(self, data, label):
+        '''
+        Método para adicionar uma linha no gráfico
+        '''
+
         plt = LinePlot(line_width=1.5, color=plot_color[label])
         plt.points = data
         self.ids['graph'].add_plot(plt)
@@ -50,6 +59,10 @@ class DataGraphWidget(BoxLayout):
         self.ids['legends'].add_widget(leg)
     
     def update_plots(self, all_data):
+        '''
+        Método para atualizar todas as linhas do gráfico 
+        '''
+
         self.clear()
         graph = self.ids['graph']
         
@@ -80,5 +93,8 @@ class DataGraphWidget(BoxLayout):
         self.ids['legends'].clear_widgets()
 
 class Legend(BoxLayout):
+    '''
+    Widget de legenda
+    '''
     color = ColorProperty() 
     text = StringProperty()

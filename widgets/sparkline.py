@@ -9,6 +9,10 @@ from widgets.timeseriesgraph import TimeSeriesGraph
 from widgets.indicator import IndicatorWidget
 
 class SparklineWidget(BoxLayout):
+    '''
+    Widget contendo gráfico + indicador linear
+    '''
+    
     ymin = NumericProperty(0)
     ymax = NumericProperty(100)
     unity = StringProperty('')

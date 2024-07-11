@@ -3,6 +3,10 @@ from kivy.uix.boxlayout import BoxLayout
 from widgets.numericinput import NumericInput
 
 class DatetimePickerWidget(BoxLayout):
+    '''
+    Widget de inserção de data
+    '''
+    
     on_enter = None
 
     def __init__(self, **kwargs):

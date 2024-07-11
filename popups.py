@@ -2,10 +2,10 @@ from kivy.uix.popup import Popup
 from kivy.uix.boxlayout import BoxLayout
 from kivy.app import App
 
-class LabeledCheckBoxDataGraph(BoxLayout):
-    pass
-
 class SettingsPopup(Popup):
+    '''
+    Popup de configurações de conexão
+    '''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         app = App.get_running_app()
@@ -22,6 +22,9 @@ class SettingsPopup(Popup):
             self.dismiss()
 
 class DisconnectedPopup(Popup):
+    '''
+    Popup de alerta de desconexão
+    '''
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         app = App.get_running_app()
